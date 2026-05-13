@@ -26,7 +26,7 @@ const inter = Inter({
 
 export default function LandingPage() {
   return (
-    <div className={`${jakarta.variable} ${inter.variable} landing min-h-screen`}>
+    <div className={`${jakarta.variable} ${inter.variable} landing min-h-screen bg-white`}>
       <Navbar />
       <main>
         <HeroSection />

@@ -16,6 +16,7 @@ const COLUMNS = [
 export default function TasksPage() {
   const [isMounted, setIsMounted] = useState(false);
   const tasks = useStore((state) => state.tasks);
+  const user = useStore((state) => state.user);
   const addTask = useStore((state) => state.addTask);
   const updateTask = useStore((state) => state.updateTask);
   const deleteTask = useStore((state) => state.deleteTask);
@@ -79,10 +80,11 @@ export default function TasksPage() {
   const handleAddTask = () => {
     if (!newTaskTitle.trim()) return;
     
+    if (!user) return;
     addTask({
-      title: newTaskTitle,
+      text: newTaskTitle,
       category: newTaskCategory,
-    });
+    }, user.id);
     
     setNewTaskTitle("");
     toast.success("Tâche ajoutée");
@@ -181,7 +183,7 @@ export default function TasksPage() {
                                       <GripVertical className="w-4 h-4" />
                                     </div>
                                     <span className={`text-sm font-medium ${task.status === 'done' ? 'line-through text-muted-foreground' : 'text-foreground'}`}>
-                                      {task.title}
+                                      {task.text}
                                     </span>
                                   </div>
                                   <button 

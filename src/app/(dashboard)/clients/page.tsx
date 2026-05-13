@@ -26,6 +26,7 @@ export default function ClientsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   
   const clients = useStore((state) => state.clients);
+  const user = useStore((state) => state.user);
   const addClient = useStore((state) => state.addClient);
   const deleteClient = useStore((state) => state.deleteClient);
 
@@ -41,7 +42,8 @@ export default function ClientsPage() {
   });
 
   const onSubmit = (data: ClientFormValues) => {
-    addClient(data);
+    if (!user) return;
+    addClient({ ...data, phone: data.phone ?? "" }, user.id);
     toast.success("Client ajouté avec succès");
     setIsModalOpen(false);
     reset();

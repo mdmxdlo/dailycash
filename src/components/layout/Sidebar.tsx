@@ -56,7 +56,15 @@ export function Sidebar() {
       </div>
 
       <div className="p-6">
-        <button className="flex items-center gap-3 px-4 py-3 w-full rounded-xl transition-all text-muted-foreground hover:bg-white/5 hover:text-destructive">
+        <button
+          onClick={async () => {
+            const { createClient } = await import("@/utils/supabase/client");
+            const supabase = createClient();
+            await supabase.auth.signOut();
+            window.location.href = '/login';
+          }}
+          className="flex items-center gap-3 px-4 py-3 w-full rounded-xl transition-all text-muted-foreground hover:bg-white/5 hover:text-destructive"
+        >
           <LogOut className="w-5 h-5" />
           <span>Déconnexion</span>
         </button>

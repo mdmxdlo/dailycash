@@ -42,7 +42,8 @@ export default function RevenuePage() {
   });
 
   const onSubmit = (data: RevenueFormValues) => {
-    addRevenue(data);
+    if (!user) return;
+    addRevenue(data, user.id);
     toast.success("Revenu ajouté avec succès");
     setIsModalOpen(false);
     reset();

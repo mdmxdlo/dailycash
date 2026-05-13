@@ -59,10 +59,17 @@ export default function SettingsPage() {
     window.location.href = '/login';
   };
 
-  const handleDelete = () => {
-    if (confirm("Êtes-vous sûr de vouloir supprimer ce compte ? Cette action est simulée.")) {
-      toast.error("Compte supprimé ! (simulation)");
+  const handleDelete = async () => {
+    if (!confirm("Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.")) return;
+    const { createClient } = await import("@/utils/supabase/client");
+    const supabase = createClient();
+    const { error } = await supabase.rpc('delete_user');
+    if (error) {
+      toast.error("Erreur lors de la suppression du compte.");
+      return;
     }
+    await supabase.auth.signOut();
+    window.location.href = '/login';
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {

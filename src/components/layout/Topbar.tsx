@@ -16,6 +16,22 @@ export function Topbar() {
   const [mounted, setMounted] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const user = useStore(state => state.user);
+  const revenues = useStore(state => state.revenues);
+
+  const handleExport = () => {
+    const rows = [
+      ["Date", "Client", "Montant", "Statut", "Note"],
+      ...revenues.map(r => [r.date, r.client, r.amount, r.status, r.note || ""]),
+    ];
+    const csv = rows.map(r => r.map(v => `"${v}"`).join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `daily-cash-revenus-${new Date().toISOString().split("T")[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -84,7 +100,7 @@ export function Topbar() {
             />
           </div>
 
-          <button className="hidden md:flex items-center gap-2 text-sm font-medium bg-secondary text-secondary-foreground px-4 py-2 rounded-full hover:bg-secondary/80 transition-colors">
+          <button onClick={handleExport} className="hidden md:flex items-center gap-2 text-sm font-medium bg-secondary text-secondary-foreground px-4 py-2 rounded-full hover:bg-secondary/80 transition-colors">
             <Download className="w-4 h-4" />
             Export
           </button>

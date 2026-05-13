@@ -52,8 +52,11 @@ export default function SettingsPage() {
     toast.success("Vos modifications ont été enregistrées avec succès !");
   };
 
-  const handleLogout = () => {
-    toast.info("Déconnexion simulée avec succès.");
+  const handleLogout = async () => {
+    const { createClient } = await import("@/utils/supabase/client");
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    window.location.href = '/login';
   };
 
   const handleDelete = () => {

@@ -1,53 +1,43 @@
-import { StatCards } from "@/components/dashboard/StatCards";
-import { RevenueChart } from "@/components/dashboard/RevenueChart";
-import { MonthlyGoal } from "@/components/dashboard/MonthlyGoal";
-import { RecentActivity } from "@/components/dashboard/RecentActivity";
-import Link from "next/link";
+import { Plus_Jakarta_Sans, Inter } from "next/font/google";
+import { Navbar } from "@/components/landing/Navbar";
+import { HeroSection } from "@/components/landing/HeroSection";
+import { ProblemsSection } from "@/components/landing/ProblemsSection";
+import { FeaturesSection } from "@/components/landing/FeaturesSection";
+import { HowItWorks } from "@/components/landing/HowItWorks";
+import { Testimonials } from "@/components/landing/Testimonials";
+import { Pricing } from "@/components/landing/Pricing";
+import { CtaSection } from "@/components/landing/CtaSection";
+import { Footer } from "@/components/landing/Footer";
+import "@/app/landing.css";
 
-export default function DashboardPage() {
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "800"],
+  variable: "--font-jakarta",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "600"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+export default function LandingPage() {
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-2xl font-bold tracking-tight">Tableau de bord</h1>
-        <p className="text-muted-foreground">
-          Voici un aperçu de vos performances financières et de votre discipline.
-        </p>
-      </div>
-
-      <StatCards />
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
-          <RevenueChart />
-        </div>
-        <div className="lg:col-span-1">
-          <MonthlyGoal />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <RecentActivity />
-        <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm flex flex-col items-center justify-center text-center">
-          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-            <svg
-              className="w-8 h-8 text-primary"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-            </svg>
-          </div>
-          <h3 className="text-lg font-semibold mb-2">Passez à l'action !</h3>
-          <p className="text-sm text-muted-foreground max-w-sm mb-6">
-            Votre série de discipline est excellente. Continuez sur cette lancée pour atteindre vos objectifs du mois.
-          </p>
-          <Link href="/tasks" className="bg-primary text-primary-foreground px-6 py-2 rounded-full font-medium hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20">
-            Ajouter une tâche
-          </Link>
-        </div>
-      </div>
+    <div className={`${jakarta.variable} ${inter.variable} landing min-h-screen`}>
+      <Navbar />
+      <main>
+        <HeroSection />
+        <ProblemsSection />
+        <FeaturesSection />
+        <HowItWorks />
+        <Testimonials />
+        <Pricing />
+        <CtaSection />
+      </main>
+      <Footer />
     </div>
   );
 }

@@ -1,3 +1,6 @@
+"use client";
+
+import { usePathname } from "next/navigation";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Topbar } from "@/components/layout/Topbar";
 import { DataLoader } from "@/components/layout/DataLoader";
@@ -8,6 +11,13 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+
+  // Landing page at "/" — skip the dashboard shell entirely
+  if (pathname === "/") {
+    return <>{children}</>;
+  }
+
   return (
     <DataLoader>
       <div className="flex h-screen overflow-hidden bg-background">

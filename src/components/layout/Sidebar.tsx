@@ -17,7 +17,7 @@ export function Sidebar() {
   const pathname = usePathname();
 
   const navItems = [
-    { name: "Tableau de bord", href: "/", icon: LayoutDashboard },
+    { name: "Tableau de bord", href: "/dashboard", icon: LayoutDashboard },
     { name: "Tâches", href: "/tasks", icon: CheckSquare },
     { name: "Clients", href: "/clients", icon: Users },
     { name: "Revenus", href: "/revenue", icon: Wallet },
@@ -28,7 +28,7 @@ export function Sidebar() {
   return (
     <aside id="tour-sidebar" className="w-64 border-r border-border/50 bg-card h-screen sticky top-0 flex flex-col justify-between hidden md:flex">
       <div className="p-6">
-        <Link href="/" className="flex items-center gap-2 mb-10 text-primary">
+        <Link href="/dashboard" className="flex items-center gap-2 mb-10 text-primary">
           <div className="bg-primary/10 p-2 rounded-xl">
             <Sparkles className="w-6 h-6 text-primary" />
           </div>
@@ -36,7 +36,7 @@ export function Sidebar() {
         </Link>
         <nav className="space-y-1">
           {navItems.map((item) => {
-            const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
+            const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
             return (
               <Link
                 key={item.name}

@@ -48,27 +48,29 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
-  // IMPORTANT: Avoid writing any logic between createServerClient and
-  // supabase.auth.getUser(). A simple mistake could make it very hard to debug
-  // issues with users being randomly logged out.
-
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
-  const isAuthRoute = request.nextUrl.pathname.startsWith('/login') || request.nextUrl.pathname.startsWith('/register')
+  const { pathname } = request.nextUrl
 
-  if (!user && !isAuthRoute) {
-    // no user, potentially respond by redirecting the user to the login page
+  const isAuthRoute = pathname.startsWith('/login') ||
+                      pathname.startsWith('/register') ||
+                      pathname.startsWith('/forgot-password')
+
+  const isLandingPage = pathname === '/'
+
+  // Unauthenticated users: only allowed on landing + auth routes
+  if (!user && !isAuthRoute && !isLandingPage) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     return NextResponse.redirect(url)
   }
 
-  if (user && isAuthRoute) {
-    // user is already logged in, redirect to dashboard
+  // Authenticated users: redirect away from landing and auth pages to dashboard
+  if (user && (isAuthRoute || isLandingPage)) {
     const url = request.nextUrl.clone()
-    url.pathname = '/'
+    url.pathname = '/dashboard'
     return NextResponse.redirect(url)
   }
 

@@ -54,7 +54,7 @@ export function Topbar() {
   const pathname = usePathname();
 
   const navItems = [
-    { name: "Tableau de bord", href: "/", icon: LayoutDashboard },
+    { name: "Tableau de bord", href: "/dashboard", icon: LayoutDashboard },
     { name: "Tâches", href: "/tasks", icon: CheckSquare },
     { name: "Clients", href: "/clients", icon: Users },
     { name: "Revenus", href: "/revenue", icon: Wallet },
@@ -82,7 +82,7 @@ export function Topbar() {
           </div>
 
           <div className="hidden md:block">
-            <h1 className="text-xl font-bold">Bonjour, {user.name.split(' ')[0]} !</h1>
+            <h1 className="text-xl font-bold">Bonjour, {user?.name.split(' ')[0]} !</h1>
             <p className="text-sm text-muted-foreground capitalize">{displayDate}</p>
           </div>
         </div>
@@ -126,7 +126,7 @@ export function Topbar() {
               <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-primary to-blue-500 p-[2px] group-hover:scale-110 transition-transform duration-300 shadow-md group-hover:shadow-primary/30">
                 <div className="w-full h-full rounded-full bg-card overflow-hidden">
                   <img
-                    src={user.avatar.length > 1 ? user.avatar : `https://api.dicebear.com/7.x/notionists/svg?seed=${user.avatar}&backgroundColor=transparent`}
+                    src={user?.avatar && user.avatar.length > 1 ? user.avatar : `https://api.dicebear.com/7.x/notionists/svg?seed=${user?.avatar ?? 'default'}&backgroundColor=transparent`}
                     alt="Avatar"
                     className="w-full h-full object-cover"
                   />

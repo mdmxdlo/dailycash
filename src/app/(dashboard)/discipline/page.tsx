@@ -1,6 +1,29 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import { Flame, Trophy, Target, CheckCircle2 } from "lucide-react";
+import { useStore } from "@/store/useStore";
+import { toast } from "sonner";
 
 export default function DisciplinePage() {
+  const tasks = useStore((state) => state.tasks);
+  const doneTasks = tasks.filter((t) => t.status === "done").length;
+  const totalTasks = tasks.length;
+
+  const [note, setNote] = useState("");
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    const saved = localStorage.getItem("daily_note");
+    if (saved) setNote(saved);
+  }, []);
+
+  const handleSave = () => {
+    localStorage.setItem("daily_note", note);
+    toast.success("Note sauvegardée");
+  };
+
   const stats = [
     {
       title: "Série Actuelle",
@@ -28,8 +51,8 @@ export default function DisciplinePage() {
     },
     {
       title: "Tâches du jour",
-      value: "3/5",
-      trend: "60% complété",
+      value: totalTasks > 0 ? `${doneTasks}/${totalTasks}` : "0",
+      trend: totalTasks > 0 ? `${Math.round((doneTasks / totalTasks) * 100)}% complété` : "Aucune tâche",
       icon: CheckCircle2,
       color: "text-blue-500",
       bg: "bg-blue-500/10"
@@ -38,7 +61,7 @@ export default function DisciplinePage() {
 
   // Mock data for weekly heatmap
   const weekDays = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
-  const completionData = [100, 80, 100, 60, 0, 0, 0]; // 0 means not yet or missed
+  const completionData = [100, 80, 100, 60, 0, 0, 0];
 
   return (
     <div id="tour-discipline" className="space-y-8 animate-in fade-in duration-500">
@@ -63,7 +86,6 @@ export default function DisciplinePage() {
             <h3 className="text-muted-foreground text-sm font-medium mb-1">{stat.title}</h3>
             <p className="text-2xl font-bold text-foreground">{stat.value}</p>
             <p className="text-xs text-muted-foreground mt-2">{stat.trend}</p>
-            
             <div className={`absolute -bottom-6 -right-6 w-24 h-24 rounded-full blur-2xl opacity-50 transition-all ${stat.bg.replace('/10', '')}`}></div>
           </div>
         ))}
@@ -78,9 +100,9 @@ export default function DisciplinePage() {
               <div key={day} className="flex items-center gap-4">
                 <span className="w-8 text-sm text-muted-foreground font-medium">{day}</span>
                 <div className="flex-1 bg-background border border-border/50 h-3 rounded-full overflow-hidden">
-                  <div 
+                  <div
                     className="h-full rounded-full transition-all duration-1000 ease-out"
-                    style={{ 
+                    style={{
                       width: `${completionData[idx]}%`,
                       backgroundColor: completionData[idx] === 100 ? 'hsl(var(--primary))' : completionData[idx] > 0 ? 'hsl(var(--primary) / 0.5)' : 'transparent'
                     }}
@@ -100,13 +122,19 @@ export default function DisciplinePage() {
           <p className="text-sm text-muted-foreground mb-4">
             Prenez l'habitude de noter un bref bilan de votre journée.
           </p>
-          <textarea 
-            className="flex-1 bg-background border border-border/50 rounded-xl p-4 text-sm focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all resize-none min-h-[150px]"
-            placeholder="Qu'avez-vous accompli aujourd'hui ? Quelles sont les leçons apprises ?"
-            defaultValue="Une journée productive. J'ai terminé les wireframes pour le client A et j'ai prospecté 3 nouvelles entreprises."
-          ></textarea>
+          {isMounted && (
+            <textarea
+              className="flex-1 bg-background border border-border/50 rounded-xl p-4 text-sm focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all resize-none min-h-[150px]"
+              placeholder="Qu'avez-vous accompli aujourd'hui ? Quelles sont les leçons apprises ?"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+            />
+          )}
           <div className="mt-4 flex justify-end">
-            <button className="bg-secondary text-secondary-foreground px-4 py-2 rounded-xl text-sm font-medium hover:bg-secondary/80 transition-colors">
+            <button
+              onClick={handleSave}
+              className="bg-primary text-primary-foreground px-4 py-2 rounded-xl text-sm font-medium hover:bg-primary/90 transition-colors shadow-sm shadow-primary/20"
+            >
               Sauvegarder
             </button>
           </div>

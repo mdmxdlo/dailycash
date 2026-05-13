@@ -250,3 +250,22 @@
   color: #f59e0b;
   letter-spacing: 2px;
 }
+
+/* ---------- Scroll-triggered animations ---------- */
+
+.scroll-anim {
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.scroll-anim-fade-up    { opacity: 0; transform: translateY(36px); }
+.scroll-anim-fade-left  { opacity: 0; transform: translateX(-36px); }
+.scroll-anim-fade-right { opacity: 0; transform: translateX(36px); }
+.scroll-anim-scale-in   { opacity: 0; transform: scale(0.90); }
+.scroll-anim-fade-in    { opacity: 0; transform: none; }
+
+.scroll-anim-visible {
+  opacity: 1 !important;
+  transform: none !important;
+}

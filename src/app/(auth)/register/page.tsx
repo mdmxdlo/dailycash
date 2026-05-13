@@ -73,9 +73,9 @@ export default function RegisterPage() {
       <div className="w-full max-w-md bg-card border border-border/50 rounded-2xl p-8 shadow-2xl animate-in zoom-in-95 duration-500">
         
         <div className="flex flex-col items-center mb-8">
-          <div className="bg-primary/10 p-3 rounded-2xl mb-4">
+          <Link href="/" className="bg-primary/10 p-3 rounded-2xl mb-4 hover:bg-primary/20 transition-colors">
             <Sparkles className="w-8 h-8 text-primary" />
-          </div>
+          </Link>
           <h1 className="text-2xl font-bold">Créer un compte</h1>
           <p className="text-muted-foreground mt-2 text-center">Rejoignez-nous pour optimiser votre gestion.</p>
         </div>

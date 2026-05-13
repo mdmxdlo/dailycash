@@ -16,7 +16,7 @@ const clientSchema = z.object({
   email: z.string().email("Email invalide").or(z.literal("")),
   phone: z.string().optional(),
   status: z.enum(["Prospect", "Contacté", "En discussion", "Client"]),
-  amount: z.number({ invalid_type_error: "Le montant doit être un nombre" }).min(0, "Le montant doit être positif"),
+  amount: z.number({ error: "Le montant doit être un nombre" }).min(0, "Le montant doit être positif"),
 });
 
 type ClientFormValues = z.infer<typeof clientSchema>;

@@ -14,7 +14,7 @@ import { formatCurrency } from "@/utils/currency";
 
 const revenueSchema = z.object({
   client: z.string().min(2, "Le client est requis"),
-  amount: z.number({ invalid_type_error: "Le montant doit être un nombre" }).min(0, "Le montant doit être positif"),
+  amount: z.number({ error: "Le montant doit être un nombre" }).min(0, "Le montant doit être positif"),
   date: z.string().min(1, "La date est requise"),
   status: z.enum(["Payé", "En attente", "Annulé"]),
   note: z.string().optional(),

@@ -8,7 +8,7 @@ import {
 
 export function HeroSection() {
   return (
-    <section className="landing lp-section lp-container mx-auto text-center pt-[120px] md:pt-[140px]">
+    <section className="landing lp-section lp-container mx-auto text-center !pt-[120px] md:!pt-[148px]">
 
       {/* Badge */}
       <div className="hero-badge inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-green-200 bg-green-50 text-green-700 text-xs font-bold uppercase tracking-wider mb-8">

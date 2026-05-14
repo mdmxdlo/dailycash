@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X, TrendingUp } from "lucide-react";
+import { Menu, X, TrendingUp, Sun, Moon } from "lucide-react";
 import { LoginModal } from "./LoginModal";
 
 const NAV_LINKS = [
@@ -11,7 +11,12 @@ const NAV_LINKS = [
   { label: "Ressources", href: "#ressources" },
 ];
 
-export function Navbar() {
+interface NavbarProps {
+  isDark: boolean;
+  onToggleTheme: () => void;
+}
+
+export function Navbar({ isDark, onToggleTheme }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
@@ -57,8 +62,16 @@ export function Navbar() {
           </div>
 
           {/* Desktop actions */}
-          <div className="hidden md:flex items-center gap-5">
-            <button onClick={openLogin} className="landing lp-nav-link font-semibold cursor-pointer">
+          <div className="hidden md:flex items-center gap-3">
+            {/* Theme toggle */}
+            <button
+              onClick={onToggleTheme}
+              className="p-2 rounded-full text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+              aria-label="Changer le thème"
+            >
+              {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
+            <button onClick={openLogin} className="landing lp-nav-link font-semibold cursor-pointer ml-2">
               Connexion
             </button>
             <Link href="/register" className="lp-btn-primary px-5 py-2.5 rounded-full text-sm font-bold">
@@ -66,14 +79,23 @@ export function Navbar() {
             </Link>
           </div>
 
-          {/* Mobile hamburger */}
-          <button
-            className="md:hidden p-2 text-slate-600 hover:text-slate-900 transition-colors rounded-lg hover:bg-slate-100"
-            onClick={() => setMenuOpen(true)}
-            aria-label="Ouvrir le menu"
-          >
-            <Menu className="w-6 h-6" />
-          </button>
+          {/* Mobile: theme toggle + hamburger */}
+          <div className="md:hidden flex items-center gap-1">
+            <button
+              onClick={onToggleTheme}
+              className="p-2 text-slate-500 hover:text-slate-900 transition-colors rounded-lg hover:bg-slate-100"
+              aria-label="Changer le thème"
+            >
+              {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
+            <button
+              className="p-2 text-slate-600 hover:text-slate-900 transition-colors rounded-lg hover:bg-slate-100"
+              onClick={() => setMenuOpen(true)}
+              aria-label="Ouvrir le menu"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -113,6 +135,13 @@ export function Navbar() {
               className="landing text-left text-[17px] font-semibold text-slate-700 hover:text-green-600 py-3.5 px-4 rounded-xl hover:bg-green-50 transition-all duration-200"
             >
               Connexion
+            </button>
+            <button
+              onClick={onToggleTheme}
+              className="landing flex items-center gap-3 text-[17px] font-semibold text-slate-700 hover:text-green-600 py-3.5 px-4 rounded-xl hover:bg-green-50 transition-all duration-200"
+            >
+              {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              {isDark ? "Mode clair" : "Mode sombre"}
             </button>
           </nav>
 

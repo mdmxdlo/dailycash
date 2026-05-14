@@ -1,13 +1,5 @@
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
-import { Navbar } from "@/components/landing/Navbar";
-import { HeroSection } from "@/components/landing/HeroSection";
-import { ProblemsSection } from "@/components/landing/ProblemsSection";
-import { FeaturesSection } from "@/components/landing/FeaturesSection";
-import { HowItWorks } from "@/components/landing/HowItWorks";
-import { Testimonials } from "@/components/landing/Testimonials";
-import { Pricing } from "@/components/landing/Pricing";
-import { CtaSection } from "@/components/landing/CtaSection";
-import { Footer } from "@/components/landing/Footer";
+import { LandingWrapper } from "@/components/landing/LandingWrapper";
 import "@/app/landing.css";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -26,18 +18,6 @@ const inter = Inter({
 
 export default function LandingPage() {
   return (
-    <div className={`${jakarta.variable} ${inter.variable} landing min-h-screen bg-white`}>
-      <Navbar />
-      <main>
-        <HeroSection />
-        <ProblemsSection />
-        <FeaturesSection />
-        <HowItWorks />
-        <Testimonials />
-        <Pricing />
-        <CtaSection />
-      </main>
-      <Footer />
-    </div>
+    <LandingWrapper fontClasses={`${jakarta.variable} ${inter.variable}`} />
   );
 }

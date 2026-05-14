@@ -31,7 +31,7 @@ export function LandingWrapper({ fontClasses }: { fontClasses: string }) {
 
   return (
     <div
-      className={`${fontClasses} landing min-h-screen`}
+      className={`${fontClasses} landing min-h-screen bg-white`}
       data-lp-dark={dark ? "true" : undefined}
     >
       <Navbar isDark={dark} onToggleTheme={toggleTheme} />

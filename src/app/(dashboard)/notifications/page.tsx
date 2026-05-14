@@ -1,24 +1,40 @@
 "use client";
 
-import { useState } from "react";
-import { Bell, CheckCircle2, DollarSign, Wallet } from "lucide-react";
+import { useState, useEffect } from "react";
+import { CheckCircle2 } from "lucide-react";
+
+const STORAGE_KEY = "daily-cash-read-notifications";
+
+const ALL_NOTIFICATIONS = [
+  {
+    id: 1,
+    title: "Bienvenue sur Daily Cash ! 🚀",
+    message: "Félicitations pour la création de votre compte. Vous êtes désormais équipé de l'outil ultime pour gérer vos revenus, suivre vos clients et optimiser votre discipline de freelance. Explorez le tableau de bord pour commencer !",
+    time: "À l'instant",
+    icon: CheckCircle2,
+    color: "text-primary",
+    bg: "bg-primary/10",
+  }
+];
 
 export default function NotificationsPage() {
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      title: "Bienvenue sur Daily Cash ! 🚀",
-      message: "Félicitations pour la création de votre compte. Vous êtes désormais équipé de l'outil ultime pour gérer vos revenus, suivre vos clients et optimiser votre discipline de freelance. Explorez le tableau de bord pour commencer !",
-      time: "À l'instant",
-      icon: CheckCircle2,
-      color: "text-primary",
-      bg: "bg-primary/10",
-      read: false
-    }
-  ]);
+  const [readIds, setReadIds] = useState<number[]>([]);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) setReadIds(JSON.parse(stored));
+    } catch {}
+  }, []);
+
+  const notifications = ALL_NOTIFICATIONS.map(n => ({ ...n, read: readIds.includes(n.id) }));
 
   const markAllAsRead = () => {
-    setNotifications(notifications.map(notif => ({ ...notif, read: true })));
+    const allIds = ALL_NOTIFICATIONS.map(n => n.id);
+    setReadIds(allIds);
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(allIds));
+    } catch {}
   };
 
   return (

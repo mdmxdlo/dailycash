@@ -57,6 +57,31 @@
   to   { transform: scaleX(1); }
 }
 
+@keyframes lp-flow {
+  0%   { left: -12px; opacity: 0; }
+  8%   { opacity: 1; }
+  92%  { opacity: 1; }
+  100% { left: calc(100% + 12px); opacity: 0; }
+}
+
+.lp-flow-dot {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  background: #16a34a;
+  border-radius: 50%;
+  animation: lp-flow 2.4s ease-in-out infinite;
+  box-shadow: 0 0 14px 5px rgba(22, 163, 74, 0.45);
+  z-index: 2;
+}
+
+.lp-flow-dot-2 {
+  animation-delay: 1.2s;
+  opacity: 0;
+}
+
 /* ---------- Hero Entrance Animations ---------- */
 
 .hero-badge     { animation: lp-fade-up 0.55s ease both; animation-delay: 0.05s; }

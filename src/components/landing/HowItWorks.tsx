@@ -33,7 +33,11 @@ export function HowItWorks() {
         </AnimateOnScroll>
 
         <div className="relative grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
-          <div className="hidden md:block absolute top-8 left-[calc(16.67%+20px)] right-[calc(16.67%+20px)] h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent z-0" />
+          <div className="hidden md:block absolute top-8 left-[calc(16.67%+20px)] right-[calc(16.67%+20px)] z-0" style={{ height: '1px' }}>
+            <div className="absolute inset-0 bg-slate-200" />
+            <div className="lp-flow-dot" />
+            <div className="lp-flow-dot lp-flow-dot-2" />
+          </div>
 
           {STEPS.map((step, i) => (
             <AnimateOnScroll key={step.num} animation="scale-in" delay={i * 150} className="relative z-10">

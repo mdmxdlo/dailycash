@@ -19,22 +19,23 @@ export default function LoginPage() {
     setIsLoading(true);
     setError(null);
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
-      if (error.message === "Invalid login credentials") {
-        setError("Email ou mot de passe incorrect.");
-      } else if (error.message.toLowerCase().includes("email not confirmed")) {
-        setError("Tu dois d'abord confirmer ton email. Vérifie ta boîte mail et clique sur le lien de confirmation.");
+    try {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        if (error.message === "Invalid login credentials") {
+          setError("Email ou mot de passe incorrect.");
+        } else if (error.message.toLowerCase().includes("email not confirmed")) {
+          setError("Tu dois d'abord confirmer ton email. Vérifie ta boîte mail.");
+        } else {
+          setError(error.message);
+        }
+        setIsLoading(false);
       } else {
-        setError(error.message);
+        window.location.href = "/dashboard";
       }
+    } catch {
+      setError("Impossible de se connecter. Vérifie ta connexion internet.");
       setIsLoading(false);
-    } else {
-      window.location.href = "/dashboard";
     }
   };
 

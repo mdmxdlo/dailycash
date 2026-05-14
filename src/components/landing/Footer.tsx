@@ -33,7 +33,7 @@ export function Footer() {
             <span className="landing-heading font-bold text-slate-900 text-base">Daily Cash</span>
           </Link>
           <p className="landing text-xs text-slate-400 leading-relaxed">
-            © 2024 Daily Cash.<br />
+            © 2026 Daily Cash.<br />
             Propulsé par la rigueur financière.<br />
             Construit pour les freelances africains.
           </p>

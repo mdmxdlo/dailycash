@@ -20,7 +20,7 @@ const TESTIMONIALS = [
     initials: "OA",
     avatarBg: "bg-amber-100",
     avatarText: "text-amber-700",
-    image: null,
+    image: "/avatars/octave-a.jpg",
   },
 ];
 

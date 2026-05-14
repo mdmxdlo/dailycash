@@ -2,9 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
-import { X, Mail, Lock, AlertCircle, Loader2, TrendingUp } from "lucide-react";
+import { X, Mail, Lock, AlertCircle, Loader2, TrendingUp, CheckCircle2 } from "lucide-react";
 
 interface Props {
   isOpen: boolean;
@@ -12,15 +11,16 @@ interface Props {
 }
 
 export function LoginModal({ isOpen, onClose }: Props) {
-  const router = useRouter();
   const supabase = createClient();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [needsConfirmation, setNeedsConfirmation] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendDone, setResendDone] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  // Close on Escape
   useEffect(() => {
     if (!isOpen) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
@@ -28,39 +28,58 @@ export function LoginModal({ isOpen, onClose }: Props) {
     return () => window.removeEventListener("keydown", onKey);
   }, [isOpen, onClose]);
 
-  // Lock scroll
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [isOpen]);
 
-  // Reset on open
   useEffect(() => {
-    if (isOpen) { setError(null); setEmail(""); setPassword(""); }
+    if (isOpen) {
+      setError(null);
+      setEmail("");
+      setPassword("");
+      setNeedsConfirmation(false);
+      setResendDone(false);
+    }
   }, [isOpen]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
+    setNeedsConfirmation(false);
 
     try {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) {
-        setError(
-          error.message === "Invalid login credentials"
-            ? "Email ou mot de passe incorrect."
-            : error.message
-        );
+        if (error.message === "Invalid login credentials") {
+          setError("Email ou mot de passe incorrect.");
+        } else if (error.message.toLowerCase().includes("email not confirmed")) {
+          setNeedsConfirmation(true);
+          setError("Tu dois d'abord confirmer ton email avant de te connecter.");
+        } else {
+          setError(error.message);
+        }
         setIsLoading(false);
       } else {
-        router.push("/dashboard");
-        router.refresh();
+        window.location.href = "/dashboard";
       }
     } catch {
       setError("Impossible de se connecter. Vérifie ta connexion internet.");
       setIsLoading(false);
     }
+  };
+
+  const handleResend = async () => {
+    setResendLoading(true);
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || window.location.origin;
+    await supabase.auth.resend({
+      type: "signup",
+      email,
+      options: { emailRedirectTo: `${siteUrl}/dashboard` },
+    });
+    setResendLoading(false);
+    setResendDone(true);
   };
 
   const handleGoogleLogin = async () => {
@@ -84,7 +103,6 @@ export function LoginModal({ isOpen, onClose }: Props) {
         className="landing w-full max-w-md bg-white rounded-2xl shadow-2xl relative"
         style={{ animation: "lp-scale-in 0.22s ease both" }}
       >
-        {/* Close button */}
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
@@ -94,7 +112,6 @@ export function LoginModal({ isOpen, onClose }: Props) {
         </button>
 
         <div className="p-8">
-          {/* Logo */}
           <div className="flex flex-col items-center mb-7">
             <div className="w-11 h-11 bg-green-600 rounded-xl flex items-center justify-center mb-4 shadow-md shadow-green-200">
               <TrendingUp className="w-5 h-5 text-white" />
@@ -105,9 +122,31 @@ export function LoginModal({ isOpen, onClose }: Props) {
 
           {/* Error */}
           {error && (
-            <div className="mb-5 p-3.5 bg-red-50 border border-red-100 rounded-xl flex items-start gap-2.5">
+            <div className="mb-4 p-3.5 bg-red-50 border border-red-100 rounded-xl flex items-start gap-2.5">
               <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
-              <p className="landing text-sm text-red-600">{error}</p>
+              <div className="flex-1">
+                <p className="landing text-sm text-red-600">{error}</p>
+                {needsConfirmation && (
+                  <button
+                    onClick={handleResend}
+                    disabled={resendLoading || resendDone}
+                    className="landing mt-2 text-xs font-semibold text-green-600 hover:underline disabled:opacity-60 flex items-center gap-1"
+                  >
+                    {resendLoading && <Loader2 className="w-3 h-3 animate-spin" />}
+                    {resendDone
+                      ? "✓ Email renvoyé ! Vérifie ta boîte mail."
+                      : "Renvoyer l'email de confirmation →"}
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Resend success standalone */}
+          {resendDone && !error && (
+            <div className="mb-4 p-3.5 bg-green-50 border border-green-100 rounded-xl flex items-center gap-2.5">
+              <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0" />
+              <p className="landing text-sm text-green-700">Email de confirmation renvoyé !</p>
             </div>
           )}
 

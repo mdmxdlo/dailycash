@@ -25,11 +25,16 @@ export default function LoginPage() {
     });
 
     if (error) {
-      setError(error.message);
+      if (error.message === "Invalid login credentials") {
+        setError("Email ou mot de passe incorrect.");
+      } else if (error.message.toLowerCase().includes("email not confirmed")) {
+        setError("Tu dois d'abord confirmer ton email. Vérifie ta boîte mail et clique sur le lien de confirmation.");
+      } else {
+        setError(error.message);
+      }
       setIsLoading(false);
     } else {
-      router.push("/dashboard");
-      router.refresh();
+      window.location.href = "/dashboard";
     }
   };
 

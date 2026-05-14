@@ -174,7 +174,7 @@ export function Pricing() {
         {/* Bottom social proof */}
         <AnimateOnScroll animation="fade-up" delay={200} className="text-center mt-10">
           <p className="landing text-sm text-slate-400">
-            Rejoins <span className="font-semibold text-slate-600">+500 freelances</span> qui suivent déjà leur cash avec Daily Cash.
+            Rejoins <span className="font-semibold text-slate-600">+50 freelances</span> qui suivent déjà leur cash avec Daily Cash.
           </p>
         </AnimateOnScroll>
 

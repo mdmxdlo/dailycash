@@ -72,25 +72,26 @@ export default function RevenuePage() {
             Suivez vos encaissements et analysez votre croissance financière.
           </p>
         </div>
-        <div className="flex gap-4">
-          <select className="bg-background border border-border/50 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all text-muted-foreground hidden md:block">
+        <div className="flex gap-2 md:gap-4">
+          <select className="bg-background border border-border/50 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all text-muted-foreground hidden md:block">
             <option value="all">Toutes les périodes</option>
             <option value="mai-2026">Mai 2026</option>
             <option value="avr-2026">Avril 2026</option>
           </select>
           <button 
             onClick={() => setIsModalOpen(true)}
-            className="bg-primary text-primary-foreground px-6 py-2.5 rounded-xl font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 shadow-sm shadow-primary/20"
+            className="bg-primary text-primary-foreground px-4 md:px-6 py-2.5 rounded-xl font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 shadow-sm shadow-primary/20 text-sm"
           >
             <Plus className="w-4 h-4" />
-            Nouveau Revenu
+            <span className="hidden sm:inline">Nouveau Revenu</span>
+            <span className="sm:hidden">Ajouter</span>
           </button>
         </div>
       </div>
 
       {/* KPIs */}
       {revenues.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
           <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm relative overflow-hidden group">
             <div className="flex justify-between items-start mb-4">
               <div className="p-3 bg-primary/10 rounded-xl text-primary">

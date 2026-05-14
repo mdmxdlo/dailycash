@@ -79,7 +79,7 @@ export default function ClientsPage() {
 
       {/* KPIs */}
       {clients.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-2 gap-3 md:gap-6">
           <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm flex items-center gap-4 group relative overflow-hidden">
             <div className="p-4 bg-purple-500/10 rounded-xl text-purple-500">
               <Briefcase className="w-6 h-6" />

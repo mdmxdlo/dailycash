@@ -52,11 +52,11 @@ export function StatCards() {
   ];
 
   return (
-    <div id="tour-stats" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div id="tour-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
       {stats.map((stat, i) => (
         <div 
           key={i} 
-          className="bg-card rounded-2xl p-6 border border-border/50 shadow-sm relative overflow-hidden group hover:scale-[1.02] hover:shadow-lg hover:border-primary/30 transition-all duration-300 animate-in fade-in slide-in-from-bottom-6 fill-mode-both"
+          className="bg-card rounded-2xl p-4 md:p-6 border border-border/50 shadow-sm relative overflow-hidden group hover:scale-[1.02] hover:shadow-lg hover:border-primary/30 transition-all duration-300 animate-in fade-in slide-in-from-bottom-6 fill-mode-both"
           style={{ animationDelay: `${i * 100}ms` }}
         >
           <div className="flex justify-between items-start mb-4">

@@ -148,9 +148,9 @@ export default function TasksPage() {
         />
       ) : (
         <DragDropContext onDragEnd={handleDragEnd}>
-          <div id="tour-kanban" className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div id="tour-kanban" className="flex gap-4 md:grid md:grid-cols-3 md:gap-6 overflow-x-auto pb-4 md:overflow-visible md:pb-0">
             {COLUMNS.map((col) => (
-              <div key={col.id} className="bg-card/50 border border-border/50 rounded-2xl flex flex-col h-full overflow-hidden">
+              <div key={col.id} className="bg-card/50 border border-border/50 rounded-2xl flex flex-col h-full overflow-hidden min-w-[280px] md:min-w-0 flex-shrink-0 md:flex-shrink">
                 <div className="p-4 border-b border-border/50 bg-card">
                   <h2 className="font-semibold text-foreground flex justify-between items-center">
                     {col.title}

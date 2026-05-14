@@ -19,7 +19,7 @@ const FAQS = [
   },
   {
     q: "Comment puis-je payer l'abonnement Pro ?",
-    a: "Nous acceptons les paiements par carte bancaire internationale. D'autres modes de paiement adaptés à l'Afrique (Mobile Money, Wave, Orange Money) seront disponibles très prochainement.",
+    a: "Nous acceptons les paiements par carte bancaire internationale ainsi que les solutions Mobile Money adaptées à l'Afrique (Wave, Orange Money, MTN Money).",
   },
   {
     q: "Puis-je annuler mon abonnement à tout moment ?",

@@ -8,6 +8,7 @@ import { FeaturesSection } from "./FeaturesSection";
 import { HowItWorks } from "./HowItWorks";
 import { Testimonials } from "./Testimonials";
 import { Pricing } from "./Pricing";
+import { FAQ } from "./FAQ";
 import { CtaSection } from "./CtaSection";
 import { Footer } from "./Footer";
 
@@ -42,6 +43,7 @@ export function LandingWrapper({ fontClasses }: { fontClasses: string }) {
         <HowItWorks />
         <Testimonials />
         <Pricing />
+        <FAQ />
         <CtaSection />
       </main>
       <Footer />

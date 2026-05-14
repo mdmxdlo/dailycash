@@ -6,7 +6,7 @@ const TESTIMONIALS = [
     quote:
       "Depuis que j'utilise Daily Cash, je sais exactement où j'en suis chaque jour. Avant je découvrais mon CA en fin de mois, maintenant j'anticipe et j'agis.",
     name: "Mohamed Diallo",
-    role: "Designer Freelance",
+    role: "Monteur Vidéo Freelance",
     initials: "MD",
     avatarBg: "bg-green-100",
     avatarText: "text-green-700",
@@ -15,9 +15,9 @@ const TESTIMONIALS = [
   {
     quote:
       "Le suivi de discipline m'a aidé à rester régulier même en période creuse. Mon chiffre d'affaires a augmenté de +35% en deux mois.",
-    name: "Aminata K.",
-    role: "Consultante RH Freelance",
-    initials: "AK",
+    name: "Octave A.",
+    role: "Développeur Freelance",
+    initials: "OA",
     avatarBg: "bg-amber-100",
     avatarText: "text-amber-700",
     image: null,

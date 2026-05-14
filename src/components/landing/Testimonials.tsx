@@ -1,23 +1,26 @@
+import Image from "next/image";
 import { AnimateOnScroll } from "./AnimateOnScroll";
 
 const TESTIMONIALS = [
   {
     quote:
-      "Daily Cash a complètement changé ma façon de voir mon activité. Avant je faisais des tâches, maintenant je génère des revenus prévisibles.",
-    name: "Marc D.",
-    role: "Développeur Freelance",
+      "Depuis que j'utilise Daily Cash, je sais exactement où j'en suis chaque jour. Avant je découvrais mon CA en fin de mois, maintenant j'anticipe et j'agis.",
+    name: "Mohamed Diallo",
+    role: "Designer Freelance",
     initials: "MD",
     avatarBg: "bg-green-100",
     avatarText: "text-green-700",
+    image: "/avatars/mohamed-diallo.jpg",
   },
   {
     quote:
-      "Le tracker de discipline est le coup de pied aux fesses dont j'avais besoin. Mes relances clients sont à jour et mon CA a fait +40%.",
-    name: "Sophie L.",
-    role: "Consultante Marketing",
-    initials: "SL",
-    avatarBg: "bg-blue-100",
-    avatarText: "text-blue-700",
+      "Le suivi de discipline m'a aidé à rester régulier même en période creuse. Mon chiffre d'affaires a augmenté de +35% en deux mois.",
+    name: "Aminata K.",
+    role: "Consultante RH Freelance",
+    initials: "AK",
+    avatarBg: "bg-amber-100",
+    avatarText: "text-amber-700",
+    image: null,
   },
 ];
 
@@ -44,9 +47,21 @@ export function Testimonials() {
                   &ldquo;{t.quote}&rdquo;
                 </p>
                 <div className="flex items-center gap-3.5">
-                  <div className={`w-11 h-11 rounded-full ${t.avatarBg} flex items-center justify-center font-bold text-sm ${t.avatarText} flex-shrink-0`}>
-                    {t.initials}
-                  </div>
+                  {t.image ? (
+                    <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0">
+                      <Image
+                        src={t.image}
+                        alt={t.name}
+                        width={44}
+                        height={44}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div className={`w-11 h-11 rounded-full ${t.avatarBg} flex items-center justify-center font-bold text-sm ${t.avatarText} flex-shrink-0`}>
+                      {t.initials}
+                    </div>
+                  )}
                   <div>
                     <p className="landing-heading font-bold text-slate-900 text-sm">{t.name}</p>
                     <p className="landing text-xs text-slate-400 mt-0.5">{t.role}</p>

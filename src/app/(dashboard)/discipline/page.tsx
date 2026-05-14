@@ -75,17 +75,17 @@ export default function DisciplinePage() {
       </div>
 
       {/* StatCards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
         {stats.map((stat, i) => (
-          <div key={i} className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm relative overflow-hidden group">
-            <div className="flex justify-between items-start mb-4">
-              <div className={`p-3 rounded-xl ${stat.bg} ${stat.color}`}>
-                <stat.icon className="w-5 h-5" />
+          <div key={i} className="bg-card border border-border/50 rounded-2xl p-4 sm:p-6 shadow-sm relative overflow-hidden group">
+            <div className="flex justify-between items-start mb-2 sm:mb-4">
+              <div className={`p-2 sm:p-3 rounded-lg sm:rounded-xl ${stat.bg} ${stat.color}`}>
+                <stat.icon className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
             </div>
-            <h3 className="text-muted-foreground text-sm font-medium mb-1">{stat.title}</h3>
-            <p className="text-2xl font-bold text-foreground">{stat.value}</p>
-            <p className="text-xs text-muted-foreground mt-2">{stat.trend}</p>
+            <h3 className="text-muted-foreground text-xs sm:text-sm font-medium mb-0.5 sm:mb-1">{stat.title}</h3>
+            <p className="text-xl sm:text-2xl font-bold text-foreground">{stat.value}</p>
+            <p className="text-[10px] sm:text-xs text-muted-foreground mt-1 sm:mt-2">{stat.trend}</p>
             <div className={`absolute -bottom-6 -right-6 w-24 h-24 rounded-full blur-2xl opacity-50 transition-all ${stat.bg.replace('/10', '')}`}></div>
           </div>
         ))}
@@ -93,8 +93,8 @@ export default function DisciplinePage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Weekly Analysis */}
-        <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm">
-          <h2 className="text-lg font-semibold mb-6">Analyse de la semaine</h2>
+        <div className="bg-card border border-border/50 rounded-2xl p-4 sm:p-6 shadow-sm">
+          <h2 className="text-base sm:text-lg font-semibold mb-4 sm:mb-6">Analyse de la semaine</h2>
           <div className="space-y-4">
             {weekDays.map((day, idx) => (
               <div key={day} className="flex items-center gap-4">
@@ -117,7 +117,7 @@ export default function DisciplinePage() {
         </div>
 
         {/* Note / Journal */}
-        <div id="tour-goal" className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm flex flex-col">
+        <div id="tour-goal" className="bg-card border border-border/50 rounded-2xl p-4 sm:p-6 shadow-sm flex flex-col">
           <h2 className="text-lg font-semibold mb-2">Note du jour</h2>
           <p className="text-sm text-muted-foreground mb-4">
             Prenez l'habitude de noter un bref bilan de votre journée.

@@ -91,37 +91,37 @@ export default function RevenuePage() {
 
       {/* KPIs */}
       {revenues.length > 0 && (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
-          <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm relative overflow-hidden group">
-            <div className="flex justify-between items-start mb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
+          <div className="bg-card border border-border/50 rounded-2xl p-4 sm:p-6 shadow-sm relative overflow-hidden group">
+            <div className="flex justify-between items-start mb-3 sm:mb-4">
               <div className="p-3 bg-primary/10 rounded-xl text-primary">
                 <DollarSign className="w-5 h-5" />
               </div>
             </div>
-            <h3 className="text-muted-foreground text-sm font-medium mb-1">Revenus Encaissés</h3>
-            <p className="text-2xl font-bold text-foreground">{formatCurrency(totalRevenue, user?.currency)}</p>
+            <h3 className="text-muted-foreground text-xs sm:text-sm font-medium mb-1">Revenus Encaissés</h3>
+            <p className="text-lg sm:text-2xl font-bold text-foreground truncate">{formatCurrency(totalRevenue, user?.currency)}</p>
             <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-all"></div>
           </div>
 
-          <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm relative overflow-hidden group">
-            <div className="flex justify-between items-start mb-4">
+          <div className="bg-card border border-border/50 rounded-2xl p-4 sm:p-6 shadow-sm relative overflow-hidden group">
+            <div className="flex justify-between items-start mb-3 sm:mb-4">
               <div className="p-3 bg-yellow-500/10 rounded-xl text-yellow-500">
                 <Wallet className="w-5 h-5" />
               </div>
             </div>
-            <h3 className="text-muted-foreground text-sm font-medium mb-1">Revenus en Attente</h3>
-            <p className="text-2xl font-bold text-foreground">{formatCurrency(pendingRevenue, user?.currency)}</p>
+            <h3 className="text-muted-foreground text-xs sm:text-sm font-medium mb-1">Revenus en Attente</h3>
+            <p className="text-lg sm:text-2xl font-bold text-foreground truncate">{formatCurrency(pendingRevenue, user?.currency)}</p>
             <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-yellow-500/5 rounded-full blur-2xl group-hover:bg-yellow-500/10 transition-all"></div>
           </div>
 
-          <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm relative overflow-hidden group">
-            <div className="flex justify-between items-start mb-4">
+          <div className="bg-card border border-border/50 rounded-2xl p-4 sm:p-6 shadow-sm relative overflow-hidden group sm:col-span-2 md:col-span-1">
+            <div className="flex justify-between items-start mb-3 sm:mb-4">
               <div className="p-3 bg-purple-500/10 rounded-xl text-purple-500">
                 <TrendingUp className="w-5 h-5" />
               </div>
             </div>
-            <h3 className="text-muted-foreground text-sm font-medium mb-1">Progression Objectif (500k)</h3>
-            <p className="text-2xl font-bold text-foreground">{Math.min(100, Math.round((totalRevenue / 500000) * 100))}%</p>
+            <h3 className="text-muted-foreground text-xs sm:text-sm font-medium mb-1">Progression Objectif</h3>
+            <p className="text-lg sm:text-2xl font-bold text-foreground">{Math.min(100, Math.round((totalRevenue / 500000) * 100))}%</p>
             <div className="w-full bg-border/50 h-2 rounded-full mt-3 overflow-hidden">
               <div className="bg-purple-500 h-full rounded-full transition-all duration-1000" style={{ width: `${Math.min(100, (totalRevenue / 500000) * 100)}%` }}></div>
             </div>

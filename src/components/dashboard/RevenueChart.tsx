@@ -39,11 +39,11 @@ export function RevenueChart() {
   const data = processChartData();
 
   return (
-    <div id="tour-chart" className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm">
-      <div className="flex items-center justify-between mb-6">
+    <div id="tour-chart" className="bg-card border border-border/50 rounded-2xl p-4 sm:p-6 shadow-sm">
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
         <div>
-          <h2 className="text-lg font-semibold">Aperçu des Revenus</h2>
-          <p className="text-sm text-muted-foreground">Évolution sur les 12 mois</p>
+          <h2 className="text-base sm:text-lg font-semibold">Aperçu des Revenus</h2>
+          <p className="text-xs sm:text-sm text-muted-foreground">Évolution sur les 12 mois</p>
         </div>
         <select className="bg-background border border-border/50 text-sm rounded-lg px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-primary/50">
           <option>Cette année</option>
@@ -51,9 +51,9 @@ export function RevenueChart() {
         </select>
       </div>
       
-      <div className="h-[300px] w-full mt-4">
+      <div className="h-[220px] sm:h-[300px] w-full mt-2 sm:mt-4">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+          <AreaChart data={data} margin={{ top: 5, right: 5, left: -10, bottom: 0 }}>
             <defs>
               <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3}/>
@@ -71,9 +71,10 @@ export function RevenueChart() {
             <YAxis 
               axisLine={false} 
               tickLine={false} 
-              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
-              tickFormatter={(value) => `${value / 1000}k`}
-              dx={-10}
+              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 11 }}
+              tickFormatter={(value) => value >= 1000 ? `${Math.round(value / 1000)}k` : `${value}`}
+              dx={-5}
+              width={35}
             />
             <Tooltip 
               contentStyle={{ 

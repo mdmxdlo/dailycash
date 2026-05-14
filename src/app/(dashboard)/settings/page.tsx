@@ -93,24 +93,24 @@ export default function SettingsPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
         {/* Settings Navigation */}
-        <div className="flex flex-col space-y-1 md:col-span-1">
+        <div className="flex flex-row md:flex-col gap-1 md:col-span-1 overflow-x-auto pb-2 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0">
           <button 
             onClick={() => setActiveTab("profil")}
-            className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${activeTab === "profil" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-white/5 hover:text-foreground"}`}
+            className={`flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-2.5 rounded-xl text-sm font-medium transition-colors whitespace-nowrap shrink-0 ${activeTab === "profil" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-white/5 hover:text-foreground"}`}
           >
             <User className="w-4 h-4" />
             Profil
           </button>
           <button 
             onClick={() => setActiveTab("preferences")}
-            className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${activeTab === "preferences" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-white/5 hover:text-foreground"}`}
+            className={`flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-2.5 rounded-xl text-sm font-medium transition-colors whitespace-nowrap shrink-0 ${activeTab === "preferences" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-white/5 hover:text-foreground"}`}
           >
             <Globe className="w-4 h-4" />
             Préférences
           </button>
           <button 
             onClick={() => setActiveTab("notifications")}
-            className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${activeTab === "notifications" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-white/5 hover:text-foreground"}`}
+            className={`flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-2.5 rounded-xl text-sm font-medium transition-colors whitespace-nowrap shrink-0 ${activeTab === "notifications" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-white/5 hover:text-foreground"}`}
           >
             <Bell className="w-4 h-4" />
             Notifications

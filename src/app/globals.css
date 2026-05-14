@@ -73,3 +73,51 @@
 .recharts-tooltip-wrapper {
   outline: none !important;
 }
+
+/* Mobile-specific improvements */
+@media (max-width: 640px) {
+  /* Ensure no horizontal overflow on mobile */
+  body {
+    overflow-x: hidden;
+  }
+  
+  /* Smaller scrollbar on mobile */
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 999px;
+  }
+  
+  /* Better touch targets */
+  button, a, input, select, textarea {
+    min-height: 36px;
+  }
+  
+  /* Prevent text overflow globally */
+  .truncate-mobile {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+/* Line clamp utility */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

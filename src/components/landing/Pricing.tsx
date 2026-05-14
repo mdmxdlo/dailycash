@@ -29,9 +29,10 @@ const PRO_FEATURES = [
 export function Pricing() {
   const [annual, setAnnual] = useState(false);
 
-  const monthlyPrice = 10;
-  const annualPrice = 8;
+  const monthlyPrice = 6500;
+  const annualPrice = 5200;
   const displayPrice = annual ? annualPrice : monthlyPrice;
+  const formatPrice = (p: number) => p.toLocaleString("fr-FR");
 
   return (
     <section className="landing lp-section lp-section-alt" id="tarifs">
@@ -78,7 +79,8 @@ export function Pricing() {
               <div className="mb-6">
                 <p className="landing text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Gratuit</p>
                 <div className="flex items-baseline gap-1.5 mb-1">
-                  <span className="landing-heading text-5xl font-extrabold text-slate-900">0€</span>
+                  <span className="landing-heading text-5xl font-extrabold text-slate-900">0</span>
+                  <span className="landing text-slate-500 text-lg font-bold">FCFA</span>
                   <span className="landing text-slate-400 text-sm">/mois</span>
                 </div>
                 <p className="landing text-xs text-slate-400">Pour démarrer et tester l'outil</p>
@@ -116,13 +118,14 @@ export function Pricing() {
                   <div>
                     <span className="landing text-xs font-bold text-green-200 uppercase tracking-widest block mb-2">Pro</span>
                     <div className="flex items-baseline gap-1.5">
-                      <span className="landing-heading text-5xl font-extrabold text-white">
-                        {displayPrice}€
+                      <span className="landing-heading text-4xl font-extrabold text-white">
+                        {formatPrice(displayPrice)}
                       </span>
+                      <span className="landing text-green-200 text-base font-bold">FCFA</span>
                       <span className="landing text-green-200 text-sm">/mois</span>
                     </div>
                     {annual && (
-                      <p className="landing text-xs text-green-200 mt-1">Facturé 96€/an · économise 24€</p>
+                      <p className="landing text-xs text-green-200 mt-1">Facturé 62 400 FCFA/an · économise 15 600 FCFA</p>
                     )}
                     {!annual && (
                       <p className="landing text-xs text-green-200 mt-1">Soit moins d'un café par semaine ☕</p>
@@ -137,7 +140,7 @@ export function Pricing() {
                   href="/register"
                   className="landing block text-center py-3 rounded-full font-bold text-sm bg-white text-green-700 hover:bg-green-50 transition-colors shadow-lg"
                 >
-                  Passer Pro — {displayPrice}€/mois
+                  Passer Pro — {formatPrice(displayPrice)} FCFA/mois
                 </Link>
               </div>
 

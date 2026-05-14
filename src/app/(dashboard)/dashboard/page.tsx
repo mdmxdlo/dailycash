@@ -6,17 +6,17 @@ import Link from "next/link";
 
 export default function DashboardPage() {
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
+    <div className="space-y-5 sm:space-y-8 animate-in fade-in duration-500">
       <div className="flex flex-col gap-2">
-        <h1 className="text-2xl font-bold tracking-tight">Tableau de bord</h1>
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight">Tableau de bord</h1>
         <p className="text-muted-foreground">
-          Voici un aperçu de vos performances financières et de votre discipline.
+          Voici un aperçu de vos performances.
         </p>
       </div>
 
       <StatCards />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         <div className="lg:col-span-2">
           <RevenueChart />
         </div>
@@ -25,7 +25,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         <RecentActivity />
         <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm flex flex-col items-center justify-center text-center">
           <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">

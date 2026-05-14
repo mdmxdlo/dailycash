@@ -14,14 +14,14 @@ export function MonthlyGoal() {
   const percentage = goal > 0 ? Math.min(100, Math.round((current / goal) * 100)) : 0;
 
   return (
-    <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm flex flex-col justify-between h-full relative overflow-hidden group">
+    <div className="bg-card border border-border/50 rounded-2xl p-4 sm:p-6 shadow-sm flex flex-col justify-between h-full relative overflow-hidden group">
       <div>
         <h2 className="text-lg font-semibold mb-1">Objectif Mensuel</h2>
         <p className="text-sm text-muted-foreground">Progression vers votre but</p>
       </div>
 
-      <div className="flex flex-col items-center justify-center py-6 relative z-10">
-        <div className="relative w-40 h-40 flex items-center justify-center">
+      <div className="flex flex-col items-center justify-center py-4 sm:py-6 relative z-10">
+        <div className="relative w-32 h-32 sm:w-40 sm:h-40 flex items-center justify-center">
           {/* Background circle */}
           <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
             <circle
@@ -48,7 +48,7 @@ export function MonthlyGoal() {
             />
           </svg>
           <div className="absolute flex flex-col items-center justify-center text-center">
-            <span className="text-3xl font-bold text-foreground">{percentage}%</span>
+            <span className="text-2xl sm:text-3xl font-bold text-foreground">{percentage}%</span>
             <span className="text-xs text-muted-foreground mt-1">Atteint</span>
           </div>
         </div>

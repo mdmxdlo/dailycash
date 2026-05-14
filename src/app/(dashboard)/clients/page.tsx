@@ -79,24 +79,24 @@ export default function ClientsPage() {
 
       {/* KPIs */}
       {clients.length > 0 && (
-        <div className="grid grid-cols-2 gap-3 md:gap-6">
-          <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm flex items-center gap-4 group relative overflow-hidden">
-            <div className="p-4 bg-purple-500/10 rounded-xl text-purple-500">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-6">
+          <div className="bg-card border border-border/50 rounded-2xl p-4 sm:p-6 shadow-sm flex items-center gap-3 sm:gap-4 group relative overflow-hidden">
+            <div className="p-3 sm:p-4 bg-purple-500/10 rounded-xl text-purple-500 shrink-0">
               <Briefcase className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-sm font-medium text-muted-foreground">Pipeline Total (Potentiel)</p>
-              <p className="text-2xl font-bold text-foreground mt-1">{formatCurrency(totalPipeline, user?.currency)}</p>
+              <p className="text-xs sm:text-sm font-medium text-muted-foreground">Pipeline Total</p>
+              <p className="text-lg sm:text-2xl font-bold text-foreground mt-1 truncate">{formatCurrency(totalPipeline, user?.currency)}</p>
             </div>
             <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-purple-500/5 rounded-full blur-2xl group-hover:bg-purple-500/10 transition-all"></div>
           </div>
-          <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm flex items-center gap-4 group relative overflow-hidden">
-            <div className="p-4 bg-primary/10 rounded-xl text-primary">
+          <div className="bg-card border border-border/50 rounded-2xl p-4 sm:p-6 shadow-sm flex items-center gap-3 sm:gap-4 group relative overflow-hidden">
+            <div className="p-3 sm:p-4 bg-primary/10 rounded-xl text-primary shrink-0">
               <DollarSign className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-sm font-medium text-muted-foreground">Revenus Fermés (Clients)</p>
-              <p className="text-2xl font-bold text-foreground mt-1">{formatCurrency(closedRevenue, user?.currency)}</p>
+              <p className="text-xs sm:text-sm font-medium text-muted-foreground">Revenus Fermés</p>
+              <p className="text-lg sm:text-2xl font-bold text-foreground mt-1 truncate">{formatCurrency(closedRevenue, user?.currency)}</p>
             </div>
             <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-primary/5 rounded-full blur-2xl group-hover:bg-primary/10 transition-all"></div>
           </div>

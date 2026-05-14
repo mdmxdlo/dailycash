@@ -52,23 +52,23 @@ export function StatCards() {
   ];
 
   return (
-    <div id="tour-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+    <div id="tour-stats" className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 md:gap-6">
       {stats.map((stat, i) => (
         <div 
           key={i} 
-          className="bg-card rounded-2xl p-4 md:p-6 border border-border/50 shadow-sm relative overflow-hidden group hover:scale-[1.02] hover:shadow-lg hover:border-primary/30 transition-all duration-300 animate-in fade-in slide-in-from-bottom-6 fill-mode-both"
+          className="bg-card rounded-2xl p-3 sm:p-4 md:p-6 border border-border/50 shadow-sm relative overflow-hidden group hover:scale-[1.02] hover:shadow-lg hover:border-primary/30 transition-all duration-300 animate-in fade-in slide-in-from-bottom-6 fill-mode-both"
           style={{ animationDelay: `${i * 100}ms` }}
         >
-          <div className="flex justify-between items-start mb-4">
-            <div className="p-3 bg-primary/10 rounded-xl text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300">
-              <stat.icon className="w-5 h-5" />
+          <div className="flex justify-between items-start mb-2 sm:mb-4">
+            <div className="p-2 sm:p-3 bg-primary/10 rounded-lg sm:rounded-xl text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300">
+              <stat.icon className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
-            <span className="text-xs font-medium px-2.5 py-1 bg-primary/10 text-primary rounded-full">
+            <span className="text-[10px] sm:text-xs font-medium px-1.5 sm:px-2.5 py-0.5 sm:py-1 bg-primary/10 text-primary rounded-full max-w-[60px] sm:max-w-none truncate">
               {stat.trend}
             </span>
           </div>
-          <h3 className="text-muted-foreground text-sm font-medium mb-1">{stat.title}</h3>
-          <p className="text-2xl font-bold text-foreground">
+          <h3 className="text-muted-foreground text-xs sm:text-sm font-medium mb-0.5 sm:mb-1 truncate">{stat.title}</h3>
+          <p className="text-base sm:text-xl md:text-2xl font-bold text-foreground truncate">
             {stat.isCurrency ? (
               <AnimatedNumber 
                 value={stat.value} 

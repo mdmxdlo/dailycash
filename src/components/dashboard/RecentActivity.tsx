@@ -55,21 +55,21 @@ export function RecentActivity() {
   ];
 
   return (
-    <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-semibold">Activité Récente</h2>
-        <button className="text-sm text-primary hover:underline">Voir tout</button>
+    <div className="bg-card border border-border/50 rounded-2xl p-4 sm:p-6 shadow-sm">
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
+        <h2 className="text-base sm:text-lg font-semibold">Activité Récente</h2>
+        <button className="text-xs sm:text-sm text-primary hover:underline">Voir tout</button>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {activities.map((activity) => (
           <div key={activity.id} className="flex items-start justify-between group">
-            <div className="flex items-start gap-4">
-              <div className={`p-3 rounded-xl ${activity.bg} ${activity.color} mt-1`}>
-                <activity.icon className="w-5 h-5" />
+            <div className="flex items-start gap-2.5 sm:gap-4 min-w-0 flex-1">
+              <div className={`p-2 sm:p-3 rounded-lg sm:rounded-xl ${activity.bg} ${activity.color} mt-0.5 sm:mt-1 shrink-0`}>
+                <activity.icon className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
               <div>
-                <h4 className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+                <h4 className="text-xs sm:text-sm font-medium text-foreground group-hover:text-primary transition-colors line-clamp-1">
                   {activity.title}
                 </h4>
                 <p className="text-sm text-muted-foreground mt-0.5">{activity.client}</p>
@@ -80,8 +80,8 @@ export function RecentActivity() {
               </div>
             </div>
             {activity.amount && (
-              <div className="text-right">
-                <span className={`text-sm font-medium ${activity.type === 'revenue' ? 'text-primary' : 'text-muted-foreground'}`}>
+              <div className="text-right shrink-0 ml-2">
+                <span className={`text-xs sm:text-sm font-medium whitespace-nowrap ${activity.type === 'revenue' ? 'text-primary' : 'text-muted-foreground'}`}>
                   {activity.amount}
                 </span>
               </div>

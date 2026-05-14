@@ -60,8 +60,12 @@ export async function updateSession(request: NextRequest) {
 
   const isLandingPage = pathname === '/'
 
-  // Unauthenticated users: only allowed on landing + auth routes
-  if (!user && !isAuthRoute && !isLandingPage) {
+  const isPublicPage = pathname.startsWith('/aide') ||
+                       pathname.startsWith('/confidentialite') ||
+                       pathname.startsWith('/conditions')
+
+  // Unauthenticated users: only allowed on landing + auth + public pages
+  if (!user && !isAuthRoute && !isLandingPage && !isPublicPage) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     return NextResponse.redirect(url)

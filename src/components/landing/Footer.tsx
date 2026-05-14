@@ -8,10 +8,10 @@ const FOOTER_LINKS = {
     { label: "Connexion", href: "/login" },
   ],
   Ressources: [
-    { label: "Aide", href: "#" },
+    { label: "Aide", href: "/aide" },
     { label: "Blog", href: "#" },
-    { label: "Politique de confidentialité", href: "#" },
-    { label: "Conditions d'utilisation", href: "#" },
+    { label: "Politique de confidentialité", href: "/confidentialite" },
+    { label: "Conditions d'utilisation", href: "/conditions" },
   ],
   Réseaux: [
     { label: "Twitter / X", href: "#" },

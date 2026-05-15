@@ -1,22 +1,70 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
-import { 
-  Bell, Search, Menu, Download, X, Sun, Moon, 
-  LayoutDashboard, CheckSquare, Users, Wallet, CalendarDays, Settings, LogOut, Sparkles
+import {
+  Bell, Search, Menu, Download, X, Sun, Moon,
+  LayoutDashboard, CheckSquare, Users, Wallet, CalendarDays, Settings, LogOut, Sparkles,
+  CheckCircle2, ExternalLink
 } from "lucide-react";
 import { useStore } from "@/store/useStore";
+
+const STORAGE_KEY = "daily-cash-read-notifications";
+
+const ALL_NOTIFICATIONS = [
+  {
+    id: 1,
+    title: "Bienvenue sur Daily Cash ! 🚀",
+    message: "Félicitations pour la création de votre compte. Explorez le tableau de bord pour commencer !",
+    time: "À l'instant",
+    icon: CheckCircle2,
+    color: "text-primary",
+    bg: "bg-primary/10",
+  }
+];
 
 export function Topbar() {
   const { theme, setTheme } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isNotifOpen, setIsNotifOpen] = useState(false);
+  const [readIds, setReadIds] = useState<number[]>([]);
+  const notifRef = useRef<HTMLDivElement>(null);
   const user = useStore(state => state.user);
   const revenues = useStore(state => state.revenues);
+
+  useEffect(() => {
+    setMounted(true);
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) setReadIds(JSON.parse(stored));
+    } catch {}
+  }, []);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (notifRef.current && !notifRef.current.contains(e.target as Node)) {
+        setIsNotifOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  const notifications = ALL_NOTIFICATIONS.map(n => ({ ...n, read: readIds.includes(n.id) }));
+  const unreadCount = notifications.filter(n => !n.read).length;
+
+  const markAllAsRead = () => {
+    const allIds = ALL_NOTIFICATIONS.map(n => n.id);
+    setReadIds(allIds);
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(allIds));
+    } catch {}
+  };
 
   const handleExport = () => {
     const rows = [
@@ -33,22 +81,8 @@ export function Topbar() {
     URL.revokeObjectURL(url);
   };
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && searchQuery.trim() !== "") {
-      alert("Résultats de recherche pour : " + searchQuery);
-      setSearchQuery("");
-    }
-  };
-
   const today = new Date().toLocaleDateString("fr-FR", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
+    weekday: "long", day: "numeric", month: "long", year: "numeric",
   });
 
   const pathname = usePathname();
@@ -62,20 +96,19 @@ export function Topbar() {
     { name: "Paramètres", href: "/settings", icon: Settings },
   ];
 
-  // Prevent hydration mismatch for date by not rendering it until mounted
   const displayDate = mounted ? today : "";
 
   return (
     <>
       <header className="h-20 border-b border-border/50 bg-card/50 backdrop-blur-md sticky top-0 z-30 px-4 md:px-8 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <button 
+          <button
             className="md:hidden p-2 -ml-2 text-muted-foreground hover:text-foreground focus:outline-none"
             onClick={() => setIsMobileMenuOpen(true)}
           >
             <Menu className="w-6 h-6" />
           </button>
-          
+
           <div className="md:hidden flex items-center gap-2 text-primary font-bold text-lg">
              <Sparkles className="w-5 h-5" />
              <span>Daily Cash</span>
@@ -94,7 +127,12 @@ export function Topbar() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={handleSearch}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && searchQuery.trim()) {
+                  alert("Résultats de recherche pour : " + searchQuery);
+                  setSearchQuery("");
+                }
+              }}
               placeholder="Rechercher..."
               className="bg-background border border-border/50 text-sm rounded-full pl-10 pr-4 py-2 focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/50 transition-all w-64"
             />
@@ -106,22 +144,77 @@ export function Topbar() {
           </button>
 
           <div className="flex items-center gap-3 md:gap-4 md:border-l md:border-border/50 md:pl-6">
-            <button 
+            <button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               className="text-muted-foreground hover:text-foreground transition-colors p-2 rounded-full hover:bg-white/5 focus:outline-none"
             >
-              {mounted && theme === "dark" ? (
-                <Sun className="w-5 h-5" />
-              ) : (
-                <Moon className="w-5 h-5" />
-              )}
+              {mounted && theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
 
-            <Link href="/notifications" className="relative text-muted-foreground hover:text-foreground transition-colors">
-              <Bell className="w-5 h-5" />
-              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-primary rounded-full border-2 border-card"></span>
-            </Link>
-            
+            {/* Notification bell + dropdown */}
+            <div ref={notifRef} className="relative">
+              <button
+                onClick={() => setIsNotifOpen(v => !v)}
+                className="relative text-muted-foreground hover:text-foreground transition-colors p-1 focus:outline-none"
+              >
+                <Bell className="w-5 h-5" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-primary rounded-full border-2 border-card" />
+                )}
+              </button>
+
+              {isNotifOpen && (
+                <div className="absolute right-0 top-10 w-80 bg-card border border-border/50 rounded-2xl shadow-2xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                  {/* Header */}
+                  <div className="flex items-center justify-between px-4 py-3 border-b border-border/50">
+                    <span className="text-sm font-semibold">Notifications</span>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={markAllAsRead}
+                        className="text-xs text-primary hover:text-primary/80 transition-colors font-medium"
+                      >
+                        Tout marquer comme lu
+                      </button>
+                      <Link
+                        href="/notifications"
+                        onClick={() => setIsNotifOpen(false)}
+                        className="p-1 text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-white/5"
+                        title="Voir en grand"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Notifications list */}
+                  <div className="max-h-80 overflow-y-auto divide-y divide-border/50">
+                    {notifications.map((notif) => (
+                      <div
+                        key={notif.id}
+                        className={`flex items-start gap-3 px-4 py-3 transition-colors hover:bg-white/5 ${notif.read ? "opacity-60" : "bg-primary/5"}`}
+                      >
+                        <div className={`p-2 rounded-xl ${notif.bg} ${notif.color} shrink-0 mt-0.5`}>
+                          <notif.icon className="w-4 h-4" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className={`text-sm font-medium leading-tight ${notif.read ? "text-foreground" : "text-primary"}`}>
+                            {notif.title}
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed line-clamp-2">
+                            {notif.message}
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">{notif.time}</p>
+                        </div>
+                        {!notif.read && (
+                          <div className="w-2 h-2 rounded-full bg-primary shrink-0 mt-1.5" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
             <button className="flex items-center gap-2 focus:outline-none group">
               <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-primary to-blue-500 p-[2px] group-hover:scale-110 transition-transform duration-300 shadow-md group-hover:shadow-primary/30">
                 <div className="w-full h-full rounded-full bg-card overflow-hidden">
@@ -140,7 +233,7 @@ export function Topbar() {
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-50 flex md:hidden">
-          <div 
+          <div
             className="fixed inset-0 bg-background/80 backdrop-blur-sm"
             onClick={() => setIsMobileMenuOpen(false)}
           ></div>
@@ -152,14 +245,14 @@ export function Topbar() {
                 </div>
                 <span className="text-xl font-bold text-foreground">Daily Cash</span>
               </Link>
-              <button 
+              <button
                 className="text-muted-foreground hover:text-foreground bg-secondary rounded-full p-2 focus:outline-none"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
-            
+
             <nav className="flex-1 overflow-y-auto p-4 space-y-2">
               {navItems.map((item) => {
                 const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
@@ -182,7 +275,7 @@ export function Topbar() {
             </nav>
 
             <div className="p-6 border-t border-border/50">
-              <button 
+              <button
                 onClick={async () => {
                   const { createClient } = await import("@/utils/supabase/client");
                   const supabase = createClient();

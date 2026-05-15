@@ -41,6 +41,7 @@ export type UserProfile = {
   currency: CurrencyType;
   is_pro: boolean;
   pro_expires_at: string | null;
+  subscription_cancelled: boolean;
 };
 
 type State = {

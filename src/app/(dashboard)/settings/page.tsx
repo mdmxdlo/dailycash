@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Camera, Save, LogOut, ShieldAlert, User, Bell, Globe, Upload, Zap, CheckCircle2, Crown, Loader2 } from "lucide-react";
+import { Camera, Save, LogOut, ShieldAlert, User, Bell, Globe, Upload, Zap, CheckCircle2, Crown, Loader2, XCircle } from "lucide-react";
 import { useStore } from "@/store/useStore";
 import { toast } from "sonner";
 import { Modal } from "@/components/ui/Modal";
@@ -20,8 +20,9 @@ export default function SettingsPage() {
   const [pendingCurrency, setPendingCurrency] = useState("");
   const [selectedPlan, setSelectedPlan] = useState<"monthly" | "annual">("monthly");
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [cancelLoading, setCancelLoading] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(
-    user?.avatar?.length > 1 ? user?.avatar : `https://api.dicebear.com/7.x/notionists/svg?seed=${user?.avatar || '1'}&backgroundColor=transparent`
+    (user?.avatar?.length ?? 0) > 1 ? user?.avatar ?? "" : `https://api.dicebear.com/7.x/notionists/svg?seed=${user?.avatar || '1'}&backgroundColor=transparent`
   );
 
   useEffect(() => {
@@ -30,7 +31,7 @@ export default function SettingsPage() {
       setEmail(user.email);
       setGoal(user.goal.toString());
       setCurrency(user.currency || "FCFA");
-      setAvatarUrl(user.avatar.length > 1 ? user.avatar : `https://api.dicebear.com/7.x/notionists/svg?seed=${user.avatar}&backgroundColor=transparent`);
+      setAvatarUrl((user.avatar?.length ?? 0) > 1 ? user.avatar : `https://api.dicebear.com/7.x/notionists/svg?seed=${user.avatar}&backgroundColor=transparent`);
     }
   }, [user]);
 
@@ -47,9 +48,9 @@ export default function SettingsPage() {
       goal: Number(goal),
       currency: currency as any,
       // we only save the seed if it's a generated avatar, else the base64 URL
-      avatar: avatarUrl.startsWith('https://api.dicebear.com') 
-        ? avatarUrl.split('seed=')[1].split('&')[0] 
-        : avatarUrl
+      avatar: (avatarUrl ?? "").startsWith('https://api.dicebear.com')
+        ? (avatarUrl ?? "").split('seed=')[1]?.split('&')[0] ?? ""
+        : (avatarUrl ?? "")
     });
     toast.success("Vos modifications ont été enregistrées avec succès !");
   };
@@ -79,6 +80,24 @@ export default function SettingsPage() {
       toast.error("Erreur réseau. Veuillez réessayer.");
     } finally {
       setCheckoutLoading(false);
+    }
+  };
+
+  const handleCancelSubscription = async () => {
+    if (!confirm("Voulez-vous vraiment annuler votre abonnement ? Vous garderez l'accès Pro jusqu'à la fin de la période en cours.")) return;
+    setCancelLoading(true);
+    try {
+      const res = await fetch("/api/subscription/cancel", { method: "POST" });
+      if (res.ok) {
+        toast.success("Abonnement annulé. Votre accès Pro reste actif jusqu'à la date d'expiration.");
+        window.location.reload();
+      } else {
+        toast.error("Erreur lors de l'annulation. Veuillez réessayer.");
+      }
+    } catch {
+      toast.error("Erreur réseau. Veuillez réessayer.");
+    } finally {
+      setCancelLoading(false);
     }
   };
 
@@ -337,14 +356,17 @@ export default function SettingsPage() {
                       <CheckCircle2 className="w-5 h-5 text-primary" />
                     </div>
                     <div>
-                      <h2 className="text-lg font-semibold">Plan Pro actif</h2>
+                      <h2 className="text-lg font-semibold">
+                        {user.subscription_cancelled ? "Abonnement annulé" : "Plan Pro actif"}
+                      </h2>
                       <p className="text-xs text-muted-foreground">
-                        Expire le {new Date(user.pro_expires_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}
+                        {user.subscription_cancelled ? "Accès Pro jusqu'au " : "Expire le "}
+                        {new Date(user.pro_expires_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}
                       </p>
                     </div>
                     <span className="ml-auto bg-primary/10 text-primary text-xs font-bold px-3 py-1 rounded-full">PRO</span>
                   </div>
-                  <ul className="space-y-2 text-sm text-muted-foreground">
+                  <ul className="space-y-2 text-sm text-muted-foreground mb-6">
                     {["Clients & tâches illimités", "Export CSV des revenus", "Objectif mensuel personnalisé", "Graphiques & analytics avancés", "Support prioritaire"].map(f => (
                       <li key={f} className="flex items-center gap-2">
                         <CheckCircle2 className="w-3.5 h-3.5 text-primary flex-shrink-0" />
@@ -352,6 +374,16 @@ export default function SettingsPage() {
                       </li>
                     ))}
                   </ul>
+                  {!user.subscription_cancelled && (
+                    <button
+                      onClick={handleCancelSubscription}
+                      disabled={cancelLoading}
+                      className="flex items-center gap-2 text-sm text-muted-foreground hover:text-destructive transition-colors"
+                    >
+                      {cancelLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <XCircle className="w-4 h-4" />}
+                      Annuler mon abonnement
+                    </button>
+                  )}
                 </div>
               ) : (
                 /* Free — show upgrade options */
@@ -466,7 +498,7 @@ export default function SettingsPage() {
             </button>
             <button 
               onClick={() => {
-                setCurrency(pendingCurrency);
+                setCurrency(pendingCurrency as "FCFA" | "GNF" | "EUR" | "USD");
                 setShowCurrencyWarning(false);
               }}
               className="bg-primary text-primary-foreground px-4 py-2 rounded-xl text-sm font-medium hover:bg-primary/90 transition-colors shadow-sm"

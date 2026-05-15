@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Camera, Save, LogOut, ShieldAlert, User, Bell, Globe, Upload } from "lucide-react";
+import { Camera, Save, LogOut, ShieldAlert, User, Bell, Globe, Upload, Zap, CheckCircle2, Crown, Loader2 } from "lucide-react";
 import { useStore } from "@/store/useStore";
 import { toast } from "sonner";
 import { Modal } from "@/components/ui/Modal";
@@ -18,6 +18,8 @@ export default function SettingsPage() {
   const [currency, setCurrency] = useState(user?.currency || "FCFA");
   const [showCurrencyWarning, setShowCurrencyWarning] = useState(false);
   const [pendingCurrency, setPendingCurrency] = useState("");
+  const [selectedPlan, setSelectedPlan] = useState<"monthly" | "annual">("monthly");
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(
     user?.avatar?.length > 1 ? user?.avatar : `https://api.dicebear.com/7.x/notionists/svg?seed=${user?.avatar || '1'}&backgroundColor=transparent`
   );
@@ -57,6 +59,27 @@ export default function SettingsPage() {
     const supabase = createClient();
     await supabase.auth.signOut();
     window.location.href = '/login';
+  };
+
+  const handleCheckout = async () => {
+    setCheckoutLoading(true);
+    try {
+      const res = await fetch("/api/checkout/moneroo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: selectedPlan }),
+      });
+      const data = await res.json();
+      if (data.checkoutUrl) {
+        window.location.href = data.checkoutUrl;
+      } else {
+        toast.error(data.error || "Erreur lors de l'initialisation du paiement.");
+      }
+    } catch {
+      toast.error("Erreur réseau. Veuillez réessayer.");
+    } finally {
+      setCheckoutLoading(false);
+    }
   };
 
   const handleDelete = async () => {
@@ -108,12 +131,19 @@ export default function SettingsPage() {
             <Globe className="w-4 h-4" />
             Préférences
           </button>
-          <button 
+          <button
             onClick={() => setActiveTab("notifications")}
             className={`flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-2.5 rounded-xl text-sm font-medium transition-colors whitespace-nowrap shrink-0 ${activeTab === "notifications" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-white/5 hover:text-foreground"}`}
           >
             <Bell className="w-4 h-4" />
             Notifications
+          </button>
+          <button
+            onClick={() => setActiveTab("abonnement")}
+            className={`flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-2.5 rounded-xl text-sm font-medium transition-colors whitespace-nowrap shrink-0 ${activeTab === "abonnement" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-white/5 hover:text-foreground"}`}
+          >
+            <Crown className="w-4 h-4" />
+            Abonnement
           </button>
         </div>
 
@@ -293,6 +323,92 @@ export default function SettingsPage() {
                   Enregistrer
                 </button>
               </div>
+            </div>
+          )}
+
+          {/* Abonnement Tab */}
+          {activeTab === "abonnement" && (
+            <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
+              {user?.is_pro && user.pro_expires_at && new Date(user.pro_expires_at) > new Date() ? (
+                /* Pro active */
+                <div className="bg-card border border-primary/30 rounded-2xl p-6 shadow-sm">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="bg-primary/10 p-2.5 rounded-xl">
+                      <CheckCircle2 className="w-5 h-5 text-primary" />
+                    </div>
+                    <div>
+                      <h2 className="text-lg font-semibold">Plan Pro actif</h2>
+                      <p className="text-xs text-muted-foreground">
+                        Expire le {new Date(user.pro_expires_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}
+                      </p>
+                    </div>
+                    <span className="ml-auto bg-primary/10 text-primary text-xs font-bold px-3 py-1 rounded-full">PRO</span>
+                  </div>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    {["Clients & tâches illimités", "Export CSV des revenus", "Objectif mensuel personnalisé", "Graphiques & analytics avancés", "Support prioritaire"].map(f => (
+                      <li key={f} className="flex items-center gap-2">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : (
+                /* Free — show upgrade options */
+                <>
+                  <div className="bg-card border border-border/50 rounded-2xl p-6 shadow-sm">
+                    <h2 className="text-lg font-semibold mb-1">Passer au plan Pro</h2>
+                    <p className="text-sm text-muted-foreground mb-6">Débloquez toutes les fonctionnalités pour accélérer votre croissance.</p>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+                      <button
+                        onClick={() => setSelectedPlan("monthly")}
+                        className={`p-4 rounded-xl border-2 text-left transition-all ${selectedPlan === "monthly" ? "border-primary bg-primary/5" : "border-border/50 hover:border-primary/40"}`}
+                      >
+                        <p className="text-xs font-bold text-muted-foreground uppercase tracking-wide mb-1">Mensuel</p>
+                        <p className="text-2xl font-extrabold">6 500 <span className="text-sm font-semibold text-muted-foreground">FCFA/mois</span></p>
+                      </button>
+                      <button
+                        onClick={() => setSelectedPlan("annual")}
+                        className={`p-4 rounded-xl border-2 text-left transition-all relative overflow-hidden ${selectedPlan === "annual" ? "border-primary bg-primary/5" : "border-border/50 hover:border-primary/40"}`}
+                      >
+                        <span className="absolute top-2 right-2 bg-primary text-primary-foreground text-[10px] font-bold px-2 py-0.5 rounded-full">-20%</span>
+                        <p className="text-xs font-bold text-muted-foreground uppercase tracking-wide mb-1">Annuel</p>
+                        <p className="text-2xl font-extrabold">5 200 <span className="text-sm font-semibold text-muted-foreground">FCFA/mois</span></p>
+                        <p className="text-xs text-muted-foreground mt-0.5">Facturé 62 400 FCFA/an</p>
+                      </button>
+                    </div>
+
+                    <button
+                      onClick={handleCheckout}
+                      disabled={checkoutLoading}
+                      className="w-full bg-primary text-primary-foreground py-3 rounded-xl font-bold text-sm hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 shadow-sm shadow-primary/20"
+                    >
+                      {checkoutLoading ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Zap className="w-4 h-4" />
+                      )}
+                      {checkoutLoading ? "Redirection..." : `Passer Pro — ${selectedPlan === "monthly" ? "6 500" : "62 400"} FCFA`}
+                    </button>
+                    <p className="text-xs text-muted-foreground text-center mt-3">
+                      Paiement sécurisé via Moneroo · Wave, Orange Money, MTN Money, carte bancaire
+                    </p>
+                  </div>
+
+                  <div className="bg-card border border-border/50 rounded-2xl p-5 shadow-sm">
+                    <h3 className="text-sm font-semibold mb-3">Ce que vous débloquez</h3>
+                    <ul className="space-y-2 text-sm text-muted-foreground">
+                      {["Clients & tâches illimités", "Export CSV des revenus", "Objectif mensuel personnalisé", "Graphiques & analytics avancés", "Support prioritaire"].map(f => (
+                        <li key={f} className="flex items-center gap-2">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </>
+              )}
             </div>
           )}
 

@@ -39,6 +39,8 @@ export type UserProfile = {
   avatar: string;
   goal: number;
   currency: CurrencyType;
+  is_pro: boolean;
+  pro_expires_at: string | null;
 };
 
 type State = {

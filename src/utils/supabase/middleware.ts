@@ -62,7 +62,8 @@ export async function updateSession(request: NextRequest) {
 
   const isPublicPage = pathname.startsWith('/aide') ||
                        pathname.startsWith('/confidentialite') ||
-                       pathname.startsWith('/conditions')
+                       pathname.startsWith('/conditions') ||
+                       pathname.startsWith('/api/webhooks/')
 
   // Unauthenticated users: only allowed on landing + auth + public pages
   if (!user && !isAuthRoute && !isLandingPage && !isPublicPage) {

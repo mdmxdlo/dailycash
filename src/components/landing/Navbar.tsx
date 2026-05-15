@@ -7,7 +7,7 @@ import { Menu, X, TrendingUp, Sun, Moon } from "lucide-react";
 const NAV_LINKS = [
   { label: "Fonctionnalités", href: "#fonctionnalites" },
   { label: "Tarifs", href: "#tarifs" },
-  { label: "Ressources", href: "#ressources" },
+  { label: "Ressources", href: "#faq" },
 ];
 
 interface NavbarProps {

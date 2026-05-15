@@ -2,12 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { Sparkles, Mail, Lock, AlertCircle, Loader2 } from "lucide-react";
 
 export default function LoginPage() {
-  const router = useRouter();
   const supabase = createClient();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -42,42 +40,40 @@ export default function LoginPage() {
   const handleGoogleLogin = async () => {
     await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: {
-        redirectTo: `${location.origin}/auth/callback`,
-      },
+      options: { redirectTo: `${location.origin}/auth/callback` },
     });
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <div className="w-full max-w-md bg-card border border-border/50 rounded-2xl p-8 shadow-2xl animate-in zoom-in-95 duration-500">
-        
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+      <div className="w-full max-w-md bg-white border border-gray-200 rounded-2xl p-8 shadow-xl animate-in zoom-in-95 duration-500">
+
         <div className="flex flex-col items-center mb-8">
-          <Link href="/" className="bg-primary/10 p-3 rounded-2xl mb-4 hover:bg-primary/20 transition-colors">
-            <Sparkles className="w-8 h-8 text-primary" />
+          <Link href="/" className="bg-green-50 p-3 rounded-2xl mb-4 hover:bg-green-100 transition-colors">
+            <Sparkles className="w-8 h-8 text-green-600" />
           </Link>
-          <h1 className="text-2xl font-bold">Content de vous revoir</h1>
-          <p className="text-muted-foreground mt-2 text-center">Connectez-vous pour gérer votre activité de freelance.</p>
+          <h1 className="text-2xl font-bold text-gray-900">Content de vous revoir</h1>
+          <p className="text-gray-500 mt-2 text-center text-sm">Connectez-vous pour gérer votre activité de freelance.</p>
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-destructive/10 border border-destructive/20 rounded-xl flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-destructive shrink-0 mt-0.5" />
-            <p className="text-sm text-destructive">{error}</p>
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+            <p className="text-sm text-red-600">{error}</p>
           </div>
         )}
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium text-muted-foreground">Email</label>
+            <label className="text-sm font-medium text-gray-700">Email</label>
             <div className="relative">
-              <Mail className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+              <Mail className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-background border border-border/50 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all"
+                className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500/30 focus:border-green-500 transition-all"
                 placeholder="vous@exemple.com"
               />
             </div>
@@ -85,19 +81,19 @@ export default function LoginPage() {
 
           <div className="space-y-2">
             <div className="flex justify-between items-center">
-              <label className="text-sm font-medium text-muted-foreground">Mot de passe</label>
-              <Link href="/forgot-password" className="text-xs text-primary hover:underline font-medium">
+              <label className="text-sm font-medium text-gray-700">Mot de passe</label>
+              <Link href="/forgot-password" className="text-xs text-green-600 hover:underline font-medium">
                 Mot de passe oublié ?
               </Link>
             </div>
             <div className="relative">
-              <Lock className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+              <Lock className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-background border border-border/50 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all"
+                className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500/30 focus:border-green-500 transition-all"
                 placeholder="••••••••"
               />
             </div>
@@ -106,7 +102,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-primary text-primary-foreground py-2.5 rounded-xl text-sm font-medium hover:bg-primary/90 transition-colors shadow-sm flex justify-center items-center gap-2 mt-6"
+            className="w-full bg-green-600 text-white py-2.5 rounded-xl text-sm font-semibold hover:bg-green-700 transition-colors shadow-sm flex justify-center items-center gap-2 mt-6"
           >
             {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Se connecter"}
           </button>
@@ -115,17 +111,17 @@ export default function LoginPage() {
         <div className="mt-6">
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-border/50" />
+              <span className="w-full border-t border-gray-200" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">Où continuer avec</span>
+              <span className="bg-white px-2 text-gray-400">Ou continuer avec</span>
             </div>
           </div>
 
           <button
             onClick={handleGoogleLogin}
             type="button"
-            className="mt-6 w-full flex items-center justify-center gap-3 bg-secondary text-secondary-foreground py-2.5 rounded-xl text-sm font-medium hover:bg-secondary/80 transition-colors border border-border"
+            className="mt-4 w-full flex items-center justify-center gap-3 bg-white text-gray-700 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors border border-gray-200"
           >
             <svg viewBox="0 0 24 24" className="w-5 h-5">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -137,10 +133,10 @@ export default function LoginPage() {
           </button>
         </div>
 
-        <p className="mt-8 text-center text-sm text-muted-foreground">
+        <p className="mt-8 text-center text-sm text-gray-500">
           Pas encore de compte ?{" "}
-          <Link href="/register" className="text-primary hover:underline font-medium">
-            S'inscrire
+          <Link href="/register" className="text-green-600 hover:underline font-semibold">
+            S'inscrire gratuitement
           </Link>
         </p>
       </div>

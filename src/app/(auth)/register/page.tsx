@@ -2,12 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import { Sparkles, Mail, Lock, AlertCircle, Loader2, User } from "lucide-react";
 
 export default function RegisterPage() {
-  const router = useRouter();
   const supabase = createClient();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -28,9 +26,7 @@ export default function RegisterPage() {
       password,
       options: {
         emailRedirectTo: `${siteUrl}/dashboard`,
-        data: {
-          full_name: name,
-        },
+        data: { full_name: name },
       },
     });
 
@@ -46,24 +42,22 @@ export default function RegisterPage() {
   const handleGoogleLogin = async () => {
     await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: {
-        redirectTo: `${location.origin}/auth/callback`,
-      },
+      options: { redirectTo: `${location.origin}/auth/callback` },
     });
   };
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background p-4">
-        <div className="w-full max-w-md bg-card border border-border/50 rounded-2xl p-8 shadow-2xl animate-in zoom-in-95 duration-500 text-center">
-          <div className="bg-primary/10 p-4 rounded-full inline-block mb-4">
-            <Mail className="w-8 h-8 text-primary" />
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+        <div className="w-full max-w-md bg-white border border-gray-200 rounded-2xl p-8 shadow-xl animate-in zoom-in-95 duration-500 text-center">
+          <div className="bg-green-50 p-4 rounded-full inline-block mb-4">
+            <Mail className="w-8 h-8 text-green-600" />
           </div>
-          <h1 className="text-2xl font-bold mb-2">Vérifiez votre email</h1>
-          <p className="text-muted-foreground mb-6">
-            Nous avons envoyé un lien de confirmation à <br/> <strong>{email}</strong>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Vérifiez votre email</h1>
+          <p className="text-gray-500 mb-6">
+            Nous avons envoyé un lien de confirmation à <br/> <strong className="text-gray-900">{email}</strong>
           </p>
-          <Link href="/login" className="text-primary hover:underline font-medium">
+          <Link href="/login" className="text-green-600 hover:underline font-medium">
             Retour à la connexion
           </Link>
         </div>
@@ -72,66 +66,66 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <div className="w-full max-w-md bg-card border border-border/50 rounded-2xl p-8 shadow-2xl animate-in zoom-in-95 duration-500">
-        
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+      <div className="w-full max-w-md bg-white border border-gray-200 rounded-2xl p-8 shadow-xl animate-in zoom-in-95 duration-500">
+
         <div className="flex flex-col items-center mb-8">
-          <Link href="/" className="bg-primary/10 p-3 rounded-2xl mb-4 hover:bg-primary/20 transition-colors">
-            <Sparkles className="w-8 h-8 text-primary" />
+          <Link href="/" className="bg-green-50 p-3 rounded-2xl mb-4 hover:bg-green-100 transition-colors">
+            <Sparkles className="w-8 h-8 text-green-600" />
           </Link>
-          <h1 className="text-2xl font-bold">Créer un compte</h1>
-          <p className="text-muted-foreground mt-2 text-center">Rejoignez-nous pour optimiser votre gestion.</p>
+          <h1 className="text-2xl font-bold text-gray-900">Créer un compte</h1>
+          <p className="text-gray-500 mt-2 text-center text-sm">Rejoignez-nous pour optimiser votre gestion.</p>
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-destructive/10 border border-destructive/20 rounded-xl flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-destructive shrink-0 mt-0.5" />
-            <p className="text-sm text-destructive">{error}</p>
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+            <p className="text-sm text-red-600">{error}</p>
           </div>
         )}
 
         <form onSubmit={handleRegister} className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium text-muted-foreground">Prénom & Nom</label>
+            <label className="text-sm font-medium text-gray-700">Prénom & Nom</label>
             <div className="relative">
-              <User className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+              <User className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
               <input
                 type="text"
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full bg-background border border-border/50 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all"
+                className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500/30 focus:border-green-500 transition-all"
                 placeholder="Jean Dupont"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-muted-foreground">Email</label>
+            <label className="text-sm font-medium text-gray-700">Email</label>
             <div className="relative">
-              <Mail className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+              <Mail className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-background border border-border/50 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all"
+                className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500/30 focus:border-green-500 transition-all"
                 placeholder="vous@exemple.com"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-muted-foreground">Mot de passe</label>
+            <label className="text-sm font-medium text-gray-700">Mot de passe</label>
             <div className="relative">
-              <Lock className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+              <Lock className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
               <input
                 type="password"
                 required
                 minLength={6}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-background border border-border/50 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all"
+                className="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500/30 focus:border-green-500 transition-all"
                 placeholder="••••••••"
               />
             </div>
@@ -140,7 +134,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-primary text-primary-foreground py-2.5 rounded-xl text-sm font-medium hover:bg-primary/90 transition-colors shadow-sm flex justify-center items-center gap-2 mt-6"
+            className="w-full bg-green-600 text-white py-2.5 rounded-xl text-sm font-semibold hover:bg-green-700 transition-colors shadow-sm flex justify-center items-center gap-2 mt-6"
           >
             {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "S'inscrire"}
           </button>
@@ -149,17 +143,17 @@ export default function RegisterPage() {
         <div className="mt-6">
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-border/50" />
+              <span className="w-full border-t border-gray-200" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">Ou s'inscrire avec</span>
+              <span className="bg-white px-2 text-gray-400">Ou s'inscrire avec</span>
             </div>
           </div>
 
           <button
             onClick={handleGoogleLogin}
             type="button"
-            className="mt-6 w-full flex items-center justify-center gap-3 bg-secondary text-secondary-foreground py-2.5 rounded-xl text-sm font-medium hover:bg-secondary/80 transition-colors border border-border"
+            className="mt-4 w-full flex items-center justify-center gap-3 bg-white text-gray-700 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors border border-gray-200"
           >
             <svg viewBox="0 0 24 24" className="w-5 h-5">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -171,9 +165,9 @@ export default function RegisterPage() {
           </button>
         </div>
 
-        <p className="mt-8 text-center text-sm text-muted-foreground">
+        <p className="mt-8 text-center text-sm text-gray-500">
           Vous avez déjà un compte ?{" "}
-          <Link href="/login" className="text-primary hover:underline font-medium">
+          <Link href="/login" className="text-green-600 hover:underline font-semibold">
             Se connecter
           </Link>
         </p>

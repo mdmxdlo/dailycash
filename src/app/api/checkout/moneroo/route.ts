@@ -1,9 +1,15 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
+import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { initMonerooPayment } from "@/lib/moneroo";
 import { randomUUID } from "node:crypto";
 
 export const runtime = "nodejs";
+
+const supabaseAdmin = createAdminClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+);
 
 const PLAN_AMOUNTS: Record<string, number> = {
   monthly: 6500,
@@ -23,7 +29,7 @@ export async function POST(req: Request) {
   const amount = PLAN_AMOUNTS[plan];
   const paymentId = randomUUID();
 
-  const { error: insertError } = await supabase.from("payments").insert({
+  const { error: insertError } = await supabaseAdmin.from("payments").insert({
     id: paymentId,
     user_id: user.id,
     amount,
@@ -37,7 +43,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Erreur lors de la création du paiement" }, { status: 500 });
   }
 
-  const { data: profile } = await supabase
+  const { data: profile } = await supabaseAdmin
     .from("profiles")
     .select("name")
     .eq("id", user.id)
@@ -56,11 +62,11 @@ export async function POST(req: Request) {
   });
 
   if (!result.ok) {
-    await supabase.from("payments").delete().eq("id", paymentId);
+    await supabaseAdmin.from("payments").delete().eq("id", paymentId);
     return NextResponse.json({ error: result.error }, { status: 502 });
   }
 
-  await supabase
+  await supabaseAdmin
     .from("payments")
     .update({ moneroo_transaction_id: result.transactionId })
     .eq("id", paymentId);

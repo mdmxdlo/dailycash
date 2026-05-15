@@ -135,12 +135,12 @@ export function Pricing({ onOpenRegister }: { onOpenRegister: () => void }) {
                   </div>
                 </div>
 
-                <Link
-                  href="/register"
-                  className="landing block text-center py-3 rounded-full font-bold text-sm bg-white text-green-700 hover:bg-green-50 transition-colors shadow-lg"
+                <button
+                  onClick={onOpenRegister}
+                  className="landing block w-full text-center py-3 rounded-full font-bold text-sm bg-white text-green-700 hover:bg-green-50 transition-colors shadow-lg"
                 >
                   Passer Pro — {formatPrice(displayPrice)} FCFA/mois
-                </Link>
+                </button>
               </div>
 
               {/* Features */}

@@ -11,10 +11,12 @@ const supabaseAdmin = createAdminClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 );
 
-const PLAN_AMOUNTS: Record<string, number> = {
-  monthly: 6500,
-  annual: 62400,
-};
+// Sandbox: amounts in EUR cents equivalent for testing; switch to XOF in production
+const IS_SANDBOX = process.env.MONEROO_SECRET_KEY?.startsWith("pvk_sandbox");
+const PLAN_AMOUNTS: Record<string, number> = IS_SANDBOX
+  ? { monthly: 10, annual: 96 }       // ~6 500 XOF / ~62 400 XOF en EUR pour le test
+  : { monthly: 6500, annual: 62400 };
+const CURRENCY = IS_SANDBOX ? "EUR" : "XOF";
 
 export async function POST(req: Request) {
   const supabase = createClient();
@@ -33,7 +35,7 @@ export async function POST(req: Request) {
     id: paymentId,
     user_id: user.id,
     amount,
-    currency: "XOF",
+    currency: CURRENCY,
     plan,
     status: "pending",
   });
@@ -54,6 +56,7 @@ export async function POST(req: Request) {
 
   const result = await initMonerooPayment({
     amount,
+    currency: CURRENCY,
     plan,
     paymentId,
     userEmail: user.email!,

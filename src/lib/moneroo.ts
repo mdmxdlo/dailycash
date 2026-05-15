@@ -14,6 +14,7 @@ function splitName(full: string | undefined, fallbackEmail: string): { first: st
 
 export async function initMonerooPayment(params: {
   amount: number;
+  currency: string;
   plan: "monthly" | "annual";
   paymentId: string;
   userEmail: string;
@@ -25,7 +26,7 @@ export async function initMonerooPayment(params: {
 
   const body = {
     amount: params.amount,
-    currency: "XOF",
+    currency: params.currency,
     description: `Daily Cash Pro — ${params.plan === "monthly" ? "Mensuel" : "Annuel"}`.slice(0, 200),
     return_url: params.returnUrl,
     customer: {

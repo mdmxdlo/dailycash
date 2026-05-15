@@ -122,6 +122,20 @@ export default function SettingsPage() {
     }
   };
 
+  // Prix de base en FCFA, convertis selon la devise choisie
+  const PRICES_FCFA = { monthly: 6500, annual: 62400, monthlyEffective: 5200 };
+  const formatPlanPrice = (fcfa: number) => {
+    const rates: Record<string, { rate: number; symbol: string; locale: string }> = {
+      FCFA: { rate: 1,       symbol: "FCFA", locale: "fr-FR" },
+      EUR:  { rate: 655.957, symbol: "€",    locale: "fr-FR" },
+      USD:  { rate: 600,     symbol: "$",    locale: "en-US" },
+      GNF:  { rate: 0.074,   symbol: "GNF",  locale: "fr-FR" },
+    };
+    const cur = rates[currency] ?? rates["FCFA"];
+    const converted = Math.round(fcfa / cur.rate);
+    return `${converted.toLocaleString(cur.locale)} ${cur.symbol}`;
+  };
+
   return (
     <div className="space-y-8 animate-in fade-in duration-500 max-w-4xl">
       <div>
@@ -398,7 +412,7 @@ export default function SettingsPage() {
                         className={`p-4 rounded-xl border-2 text-left transition-all ${selectedPlan === "monthly" ? "border-primary bg-primary/5" : "border-border/50 hover:border-primary/40"}`}
                       >
                         <p className="text-xs font-bold text-muted-foreground uppercase tracking-wide mb-1">Mensuel</p>
-                        <p className="text-2xl font-extrabold">6 500 <span className="text-sm font-semibold text-muted-foreground">FCFA/mois</span></p>
+                        <p className="text-2xl font-extrabold">{formatPlanPrice(PRICES_FCFA.monthly)} <span className="text-sm font-semibold text-muted-foreground">/mois</span></p>
                       </button>
                       <button
                         onClick={() => setSelectedPlan("annual")}
@@ -406,8 +420,8 @@ export default function SettingsPage() {
                       >
                         <span className="absolute top-2 right-2 bg-primary text-primary-foreground text-[10px] font-bold px-2 py-0.5 rounded-full">-20%</span>
                         <p className="text-xs font-bold text-muted-foreground uppercase tracking-wide mb-1">Annuel</p>
-                        <p className="text-2xl font-extrabold">5 200 <span className="text-sm font-semibold text-muted-foreground">FCFA/mois</span></p>
-                        <p className="text-xs text-muted-foreground mt-0.5">Facturé 62 400 FCFA/an</p>
+                        <p className="text-2xl font-extrabold">{formatPlanPrice(PRICES_FCFA.monthlyEffective)} <span className="text-sm font-semibold text-muted-foreground">/mois</span></p>
+                        <p className="text-xs text-muted-foreground mt-0.5">Facturé {formatPlanPrice(PRICES_FCFA.annual)}/an</p>
                       </button>
                     </div>
 
@@ -421,7 +435,7 @@ export default function SettingsPage() {
                       ) : (
                         <Zap className="w-4 h-4" />
                       )}
-                      {checkoutLoading ? "Redirection..." : `Passer Pro — ${selectedPlan === "monthly" ? "6 500" : "62 400"} FCFA`}
+                      {checkoutLoading ? "Redirection..." : `Passer Pro — ${formatPlanPrice(selectedPlan === "monthly" ? PRICES_FCFA.monthly : PRICES_FCFA.annual)}`}
                     </button>
                     <p className="text-xs text-muted-foreground text-center mt-3">
                       Paiement sécurisé via Moneroo · Wave, Orange Money, MTN Money, carte bancaire

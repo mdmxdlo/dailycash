@@ -1,7 +1,6 @@
-import Link from "next/link";
 import { AnimateOnScroll } from "./AnimateOnScroll";
 
-export function CtaSection() {
+export function CtaSection({ onOpenRegister }: { onOpenRegister: () => void }) {
   return (
     <section className="landing lp-section bg-white">
       <div className="lp-container mx-auto text-center">
@@ -15,12 +14,12 @@ export function CtaSection() {
               Utilise Daily Cash ou continue de deviner. Les freelances sérieux suivent leurs chiffres.
               Rejoins l&apos;élite.
             </p>
-            <Link
-              href="/register"
+            <button
+              onClick={onOpenRegister}
               className="lp-btn-primary inline-block px-10 py-4 rounded-full font-bold text-sm"
             >
               Commencer gratuitement
-            </Link>
+            </button>
           </div>
         </AnimateOnScroll>
       </div>

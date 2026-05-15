@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X, TrendingUp, Sun, Moon } from "lucide-react";
-import { LoginModal } from "./LoginModal";
 
 const NAV_LINKS = [
   { label: "Fonctionnalités", href: "#fonctionnalites" },
@@ -14,12 +13,13 @@ const NAV_LINKS = [
 interface NavbarProps {
   isDark: boolean;
   onToggleTheme: () => void;
+  onOpenLogin: () => void;
+  onOpenRegister: () => void;
 }
 
-export function Navbar({ isDark, onToggleTheme }: NavbarProps) {
+export function Navbar({ isDark, onToggleTheme, onOpenLogin, onOpenRegister }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [loginOpen, setLoginOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -27,15 +27,13 @@ export function Navbar({ isDark, onToggleTheme }: NavbarProps) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Lock body scroll when mobile menu is open (modal handles its own lock)
   useEffect(() => {
-    if (!loginOpen) {
-      document.body.style.overflow = menuOpen ? "hidden" : "";
-    }
-    return () => { if (!loginOpen) document.body.style.overflow = ""; };
-  }, [menuOpen, loginOpen]);
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [menuOpen]);
 
-  const openLogin = () => { setMenuOpen(false); setLoginOpen(true); };
+  const handleLogin = () => { setMenuOpen(false); onOpenLogin(); };
+  const handleRegister = () => { setMenuOpen(false); onOpenRegister(); };
 
   return (
     <>
@@ -63,7 +61,6 @@ export function Navbar({ isDark, onToggleTheme }: NavbarProps) {
 
           {/* Desktop actions */}
           <div className="hidden md:flex items-center gap-3">
-            {/* Theme toggle */}
             <button
               onClick={onToggleTheme}
               className="p-2 rounded-full text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors"
@@ -71,12 +68,12 @@ export function Navbar({ isDark, onToggleTheme }: NavbarProps) {
             >
               {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
-            <button onClick={openLogin} className="landing lp-nav-link font-semibold cursor-pointer ml-2">
+            <button onClick={handleLogin} className="landing lp-nav-link font-semibold cursor-pointer ml-2">
               Connexion
             </button>
-            <Link href="/register" className="lp-btn-primary px-5 py-2.5 rounded-full text-sm font-bold">
+            <button onClick={handleRegister} className="lp-btn-primary px-5 py-2.5 rounded-full text-sm font-bold">
               Commencer gratuitement
-            </Link>
+            </button>
           </div>
 
           {/* Mobile: theme toggle + hamburger */}
@@ -131,7 +128,7 @@ export function Navbar({ isDark, onToggleTheme }: NavbarProps) {
             ))}
             <div className="my-3 border-t border-slate-100" />
             <button
-              onClick={openLogin}
+              onClick={handleLogin}
               className="landing text-left text-[17px] font-semibold text-slate-700 hover:text-green-600 py-3.5 px-4 rounded-xl hover:bg-green-50 transition-all duration-200"
             >
               Connexion
@@ -146,19 +143,15 @@ export function Navbar({ isDark, onToggleTheme }: NavbarProps) {
           </nav>
 
           <div className="p-5 border-t border-slate-100">
-            <Link
-              href="/register"
-              onClick={() => setMenuOpen(false)}
-              className="lp-btn-primary block text-center py-4 rounded-full text-base font-bold"
+            <button
+              onClick={handleRegister}
+              className="lp-btn-primary w-full text-center py-4 rounded-full text-base font-bold"
             >
               Commencer gratuitement
-            </Link>
+            </button>
           </div>
         </div>
       )}
-
-      {/* Login modal */}
-      <LoginModal isOpen={loginOpen} onClose={() => setLoginOpen(false)} />
     </>
   );
 }

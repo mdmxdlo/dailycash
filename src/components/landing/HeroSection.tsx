@@ -1,12 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import {
   DollarSign, Flame, Users, Target,
   TrendingUp, CheckCircle2, BarChart3, Wallet,
 } from "lucide-react";
 
-export function HeroSection() {
+export function HeroSection({ onOpenRegister }: { onOpenRegister: () => void }) {
   return (
     <section className="landing lp-section lp-container mx-auto text-center !pt-[120px] md:!pt-[148px]">
 
@@ -30,12 +29,12 @@ export function HeroSection() {
 
       {/* CTAs */}
       <div className="hero-cta flex flex-col sm:flex-row justify-center items-center gap-4 mb-16 md:mb-20">
-        <Link
-          href="/register"
+        <button
+          onClick={onOpenRegister}
           className="lp-btn-primary w-full sm:w-auto px-8 py-4 rounded-full text-sm font-bold text-center"
         >
           Commencer gratuitement
-        </Link>
+        </button>
         <a
           href="#fonctionnalites"
           className="lp-btn-secondary landing w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 rounded-full text-sm font-bold"

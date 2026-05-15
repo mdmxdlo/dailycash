@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 import { AnimateOnScroll } from "./AnimateOnScroll";
 import { Check, X, Zap, Shield, BarChart3 } from "lucide-react";
@@ -26,7 +25,7 @@ const PRO_FEATURES = [
   { text: "Support prioritaire", included: true, bold: false },
 ];
 
-export function Pricing() {
+export function Pricing({ onOpenRegister }: { onOpenRegister: () => void }) {
   const [annual, setAnnual] = useState(false);
 
   const monthlyPrice = 6500;
@@ -100,12 +99,12 @@ export function Pricing() {
                 ))}
               </ul>
 
-              <Link
-                href="/register"
-                className="lp-btn-secondary landing block text-center py-3 rounded-full font-bold text-sm"
+              <button
+                onClick={onOpenRegister}
+                className="lp-btn-secondary landing block w-full text-center py-3 rounded-full font-bold text-sm"
               >
                 Commencer gratuitement
-              </Link>
+              </button>
             </div>
           </AnimateOnScroll>
 

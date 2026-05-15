@@ -8,9 +8,10 @@ import { X, Mail, Lock, AlertCircle, Loader2, TrendingUp, CheckCircle2 } from "l
 interface Props {
   isOpen: boolean;
   onClose: () => void;
+  onOpenRegister: () => void;
 }
 
-export function LoginModal({ isOpen, onClose }: Props) {
+export function LoginModal({ isOpen, onClose, onOpenRegister }: Props) {
   const supabase = createClient();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -220,9 +221,12 @@ export function LoginModal({ isOpen, onClose }: Props) {
 
           <p className="landing mt-6 text-center text-sm text-slate-500">
             Pas encore de compte ?{" "}
-            <Link href="/register" className="text-green-600 hover:underline font-semibold">
+            <button
+              onClick={() => { onClose(); onOpenRegister(); }}
+              className="text-green-600 hover:underline font-semibold"
+            >
               S&apos;inscrire gratuitement
-            </Link>
+            </button>
           </p>
         </div>
       </div>

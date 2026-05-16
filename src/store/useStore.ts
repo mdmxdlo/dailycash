@@ -42,6 +42,8 @@ export type UserProfile = {
   is_pro: boolean;
   pro_expires_at: string | null;
   subscription_cancelled: boolean;
+  onboarded: boolean;
+  freelance_type: string | null;
 };
 
 type State = {

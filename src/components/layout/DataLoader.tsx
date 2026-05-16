@@ -25,6 +25,14 @@ export function DataLoader({ children }: { children: React.ReactNode }) {
       if (!isInitialized) {
         await fetchData(session.user.id);
       }
+
+      // Redirect to onboarding if not yet completed
+      const user = useStore.getState().user;
+      if (user && !user.onboarded) {
+        router.push('/onboarding');
+        return;
+      }
+
       setLoading(false);
     };
 

@@ -8,9 +8,10 @@ import { Modal } from "@/components/ui/Modal";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { toast } from "sonner";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { DatePicker } from "@/components/ui/DatePicker";
 import { formatCurrency } from "@/utils/currency";
 
 const revenueSchema = z.object({
@@ -32,7 +33,7 @@ export default function RevenuePage() {
   const deleteRevenue = useStore((state) => state.deleteRevenue);
   const user = useStore((state) => state.user);
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<RevenueFormValues>({
+  const { register, handleSubmit, reset, control, formState: { errors } } = useForm<RevenueFormValues>({
     resolver: zodResolver(revenueSchema),
     defaultValues: {
       client: "",
@@ -238,10 +239,12 @@ export default function RevenuePage() {
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-muted-foreground">Date *</label>
-              <input
-                {...register("date")}
-                type="date"
-                className="w-full bg-background border border-border/50 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all"
+              <Controller
+                name="date"
+                control={control}
+                render={({ field }) => (
+                  <DatePicker value={field.value} onChange={field.onChange} />
+                )}
               />
               {errors.date && <p className="text-destructive text-xs mt-1">{errors.date.message}</p>}
             </div>

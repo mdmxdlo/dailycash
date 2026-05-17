@@ -24,6 +24,7 @@ export default function SettingsPage() {
   const [cancelLoading, setCancelLoading] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(
     (user?.avatar?.length ?? 0) > 1 ? user?.avatar ?? "" : `https://api.dicebear.com/7.x/notionists/svg?seed=${user?.avatar || '1'}&backgroundColor=transparent`
   );
@@ -469,8 +470,8 @@ export default function SettingsPage() {
               Une fois que vous supprimez votre compte, il n'y a pas de retour en arrière possible. Soyez certain.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <button 
-                onClick={handleLogout}
+              <button
+                onClick={() => setShowLogoutConfirm(true)}
                 className="bg-secondary text-secondary-foreground px-6 py-2 rounded-xl text-sm font-medium hover:bg-secondary/80 transition-colors flex items-center justify-center gap-2 border border-border"
               >
                 <LogOut className="w-4 h-4" />
@@ -487,6 +488,15 @@ export default function SettingsPage() {
 
         </div>
       </div>
+
+      <ConfirmDialog
+        isOpen={showLogoutConfirm}
+        onClose={() => setShowLogoutConfirm(false)}
+        onConfirm={() => { setShowLogoutConfirm(false); handleLogout(); }}
+        title="Se déconnecter"
+        description="Vous serez redirigé vers la page de connexion. Vos données restent sauvegardées."
+        confirmLabel="Se déconnecter"
+      />
 
       <ConfirmDialog
         isOpen={showCancelConfirm}

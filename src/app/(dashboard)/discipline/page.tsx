@@ -30,16 +30,16 @@ export default function DisciplinePage() {
       value: "5 Jours",
       trend: "En cours",
       icon: Flame,
-      color: "text-orange-500",
-      bg: "bg-orange-500/10"
+      color: "text-primary",
+      bg: "bg-primary/10"
     },
     {
       title: "Meilleure Série",
       value: "12 Jours",
       trend: "Record personnel",
       icon: Trophy,
-      color: "text-yellow-500",
-      bg: "bg-yellow-500/10"
+      color: "text-primary",
+      bg: "bg-primary/10"
     },
     {
       title: "Complétion Hebdomadaire",
@@ -54,8 +54,8 @@ export default function DisciplinePage() {
       value: totalTasks > 0 ? `${doneTasks}/${totalTasks}` : "0",
       trend: totalTasks > 0 ? `${Math.round((doneTasks / totalTasks) * 100)}% complété` : "Aucune tâche",
       icon: CheckCircle2,
-      color: "text-blue-500",
-      bg: "bg-blue-500/10"
+      color: "text-primary",
+      bg: "bg-primary/10"
     },
   ];
 

@@ -6,6 +6,7 @@ import { Plus, TrendingUp, DollarSign, Wallet, Trash2, Receipt } from "lucide-re
 import { useStore, Revenue } from "@/store/useStore";
 import { Modal } from "@/components/ui/Modal";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,6 +25,7 @@ type RevenueFormValues = z.infer<typeof revenueSchema>;
 
 export default function RevenuePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [confirmId, setConfirmId] = useState<number | null>(null);
   
   const revenues = useStore((state) => state.revenues);
   const addRevenue = useStore((state) => state.addRevenue);
@@ -51,7 +53,7 @@ export default function RevenuePage() {
 
   const handleDelete = (id: number) => {
     deleteRevenue(id);
-    toast.error("Revenu supprimé");
+    toast.success("Revenu supprimé");
   };
 
   const totalRevenue = revenues.filter(r => r.status === "Payé").reduce((sum, item) => sum + item.amount, 0);
@@ -185,7 +187,7 @@ export default function RevenuePage() {
                       {formatCurrency(entry.amount, user?.currency)}
                     </td>
                     <td className="px-6 py-4 text-center">
-                      <button onClick={() => handleDelete(entry.id)} className="text-muted-foreground hover:text-destructive p-2 rounded-lg hover:bg-destructive/10 transition-colors focus:outline-none">
+                      <button onClick={() => setConfirmId(entry.id)} className="text-muted-foreground hover:text-destructive p-2 rounded-lg hover:bg-destructive/10 transition-colors focus:outline-none">
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </td>
@@ -196,6 +198,18 @@ export default function RevenuePage() {
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        isOpen={confirmId !== null}
+        onClose={() => setConfirmId(null)}
+        onConfirm={() => {
+          if (confirmId !== null) handleDelete(confirmId);
+          setConfirmId(null);
+        }}
+        title="Supprimer le revenu"
+        description="Cette action est irréversible. L'entrée de revenu sera définitivement supprimée."
+        confirmLabel="Supprimer"
+      />
 
       {/* Modal Add Revenue */}
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Nouveau Revenu">

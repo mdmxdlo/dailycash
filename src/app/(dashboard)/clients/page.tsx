@@ -9,6 +9,7 @@ import { Search, Plus, Briefcase, DollarSign, Trash2, Users } from "lucide-react
 import { useStore, Client } from "@/store/useStore";
 import { Modal } from "@/components/ui/Modal";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { toast } from "sonner";
 
 const clientSchema = z.object({
@@ -24,6 +25,7 @@ type ClientFormValues = z.infer<typeof clientSchema>;
 export default function ClientsPage() {
   const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [confirmId, setConfirmId] = useState<number | null>(null);
   
   const clients = useStore((state) => state.clients);
   const user = useStore((state) => state.user);
@@ -51,7 +53,7 @@ export default function ClientsPage() {
 
   const handleDeleteClient = (id: number) => {
     deleteClient(id);
-    toast.error("Client supprimé");
+    toast.success("Client supprimé");
   };
 
   const filteredClients = clients.filter((c) => c.name.toLowerCase().includes(search.toLowerCase()));
@@ -173,7 +175,7 @@ export default function ClientsPage() {
                     {formatCurrency(client.amount, user?.currency)}
                   </td>
                   <td className="px-6 py-4 text-center">
-                    <button onClick={() => handleDeleteClient(client.id)} className="text-muted-foreground hover:text-destructive p-2 rounded-lg hover:bg-destructive/10 transition-colors focus:outline-none">
+                    <button onClick={() => setConfirmId(client.id)} className="text-muted-foreground hover:text-destructive p-2 rounded-lg hover:bg-destructive/10 transition-colors focus:outline-none">
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </td>
@@ -192,6 +194,18 @@ export default function ClientsPage() {
       )}
 
       {/* Modal Add Client */}
+      <ConfirmDialog
+        isOpen={confirmId !== null}
+        onClose={() => setConfirmId(null)}
+        onConfirm={() => {
+          if (confirmId !== null) handleDeleteClient(confirmId);
+          setConfirmId(null);
+        }}
+        title="Supprimer le client"
+        description="Cette action est irréversible. Le client et toutes ses données seront définitivement supprimés."
+        confirmLabel="Supprimer"
+      />
+
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Nouveau Client">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">

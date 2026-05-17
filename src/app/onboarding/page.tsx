@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
+import { useStore } from "@/store/useStore";
 import { Loader2, TrendingUp, ArrowRight, ArrowLeft, Check } from "lucide-react";
 
 // ─── Data ───────────────────────────────────────────────────────────────────
@@ -110,6 +111,7 @@ export default function OnboardingPage() {
       onboarded: true,
     }).eq("id", user.id);
 
+    useStore.setState({ isInitialized: false });
     router.push("/dashboard");
   };
 

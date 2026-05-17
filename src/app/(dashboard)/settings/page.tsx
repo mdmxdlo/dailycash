@@ -5,6 +5,7 @@ import { Camera, Save, LogOut, ShieldAlert, User, Bell, Globe, Upload, Zap, Chec
 import { useStore } from "@/store/useStore";
 import { toast } from "sonner";
 import { Modal } from "@/components/ui/Modal";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState("profil"); // "profil", "preferences", "notifications"
@@ -21,6 +22,8 @@ export default function SettingsPage() {
   const [selectedPlan, setSelectedPlan] = useState<"monthly" | "annual">("monthly");
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [cancelLoading, setCancelLoading] = useState(false);
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState(
     (user?.avatar?.length ?? 0) > 1 ? user?.avatar ?? "" : `https://api.dicebear.com/7.x/notionists/svg?seed=${user?.avatar || '1'}&backgroundColor=transparent`
   );
@@ -84,7 +87,6 @@ export default function SettingsPage() {
   };
 
   const handleCancelSubscription = async () => {
-    if (!confirm("Voulez-vous vraiment annuler votre abonnement ? Vous garderez l'accès Pro jusqu'à la fin de la période en cours.")) return;
     setCancelLoading(true);
     try {
       const res = await fetch("/api/subscription/cancel", { method: "POST" });
@@ -102,7 +104,6 @@ export default function SettingsPage() {
   };
 
   const handleDelete = async () => {
-    if (!confirm("Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.")) return;
     const { createClient } = await import("@/utils/supabase/client");
     const supabase = createClient();
     const { error } = await supabase.rpc('delete_user');
@@ -390,7 +391,7 @@ export default function SettingsPage() {
                   </ul>
                   {!user.subscription_cancelled && (
                     <button
-                      onClick={handleCancelSubscription}
+                      onClick={() => setShowCancelConfirm(true)}
                       disabled={cancelLoading}
                       className="flex items-center gap-2 text-sm text-muted-foreground hover:text-destructive transition-colors"
                     >
@@ -475,8 +476,8 @@ export default function SettingsPage() {
                 <LogOut className="w-4 h-4" />
                 Se déconnecter
               </button>
-              <button 
-                onClick={handleDelete}
+              <button
+                onClick={() => setShowDeleteConfirm(true)}
                 className="bg-destructive text-destructive-foreground px-6 py-2 rounded-xl text-sm font-medium hover:bg-destructive/90 transition-colors shadow-sm shadow-destructive/20"
               >
                 Supprimer le compte
@@ -487,7 +488,26 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      <Modal 
+      <ConfirmDialog
+        isOpen={showCancelConfirm}
+        onClose={() => setShowCancelConfirm(false)}
+        onConfirm={() => { setShowCancelConfirm(false); handleCancelSubscription(); }}
+        title="Annuler l'abonnement"
+        description="Vous garderez l'accès Pro jusqu'à la fin de la période en cours. Cette action ne peut pas être annulée."
+        confirmLabel="Annuler l'abonnement"
+        loading={cancelLoading}
+      />
+
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={() => { setShowDeleteConfirm(false); handleDelete(); }}
+        title="Supprimer le compte"
+        description="Cette action est irréversible. Toutes vos données (tâches, clients, revenus) seront définitivement supprimées."
+        confirmLabel="Supprimer définitivement"
+      />
+
+      <Modal
         isOpen={showCurrencyWarning} 
         onClose={() => setShowCurrencyWarning(false)} 
         title="⚠️ Changement de devise"

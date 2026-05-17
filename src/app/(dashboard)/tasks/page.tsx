@@ -6,6 +6,7 @@ import { useStore, Task } from "@/store/useStore";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import { toast } from "sonner";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 
 const COLUMNS = [
   { id: "todo", title: "À faire" },
@@ -24,6 +25,7 @@ export default function TasksPage() {
 
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTaskCategory, setNewTaskCategory] = useState<Task["category"]>("Prospection");
+  const [confirmId, setConfirmId] = useState<number | null>(null);
 
   useEffect(() => {
     setIsMounted(true);
@@ -186,8 +188,8 @@ export default function TasksPage() {
                                       {task.text}
                                     </span>
                                   </div>
-                                  <button 
-                                    onClick={() => deleteTask(task.id)}
+                                  <button
+                                    onClick={() => setConfirmId(task.id)}
                                     className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-all"
                                   >
                                     <Trash2 className="w-4 h-4" />
@@ -212,6 +214,18 @@ export default function TasksPage() {
           </div>
         </DragDropContext>
       )}
+
+      <ConfirmDialog
+        isOpen={confirmId !== null}
+        onClose={() => setConfirmId(null)}
+        onConfirm={() => {
+          if (confirmId !== null) deleteTask(confirmId);
+          setConfirmId(null);
+        }}
+        title="Supprimer la tâche"
+        description="Cette action est irréversible. La tâche sera définitivement supprimée."
+        confirmLabel="Supprimer"
+      />
     </div>
   );
 }
